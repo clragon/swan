@@ -1,0 +1,21 @@
+name: swan
+description: Simple Widget Annotation Naturalizer Discord Bot
+version: 1.0.0
+repository: https://github.com/clragon/swan
+
+environment:
+  sdk: ^3.1.0
+
+dependencies:
+  analyzer: ^6.2.0
+  dart_style: ^2.3.2
+  dotenv: ^4.1.0
+  intl: ^0.18.1
+  meta: ^1.9.1
+  nyxx: ^5.1.1
+  petitparser: ^6.0.1
+  recase: ^4.1.0
+
+dev_dependencies:
+  lints: ^2.0.0
+  test: ^1.21.0
