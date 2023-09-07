@@ -1,0 +1,82 @@
+name: release
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        arch: ["linux/amd64", "linux/arm64/v8"]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: setup dart sdk
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: stable
+
+      - name: get dependencies
+        run: dart pub get
+
+      - name: set arch name for artifact
+        id: sanitize
+        run: echo "sanitized_arch=$(echo ${{ matrix.arch }} | sed 's/\//_/g')" >> $GITHUB_ENV
+
+      - name: compile binary
+        run: |
+          mkdir -p build
+          if [ "${{ matrix.arch }}" = "linux/arm64/v8" ]; then
+            # Enable QEMU emulation for ARM64
+            docker run \
+              --rm \
+              --privileged \
+              multiarch/qemu-user-static \
+              --reset -p yes
+            
+            # Run Dart compilation inside an ARM64 Docker container
+            docker run \
+              --rm \
+              --platform ${{ matrix.arch }} \
+              -v "$PWD":/work \
+              -w /work \
+              dart:stable \
+              /bin/bash -c "\
+                dart pub get && \
+                dart compile exe lib/main.dart -o build/app_${{ env.sanitized_arch }}"
+          else
+            # Compile directly on the runner for amd64 architecture
+            dart compile exe lib/main.dart -o build/app_${{ env.sanitized_arch }}
+          fi
+
+      - name: upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: app_${{ env.sanitized_arch }}
+          path: build/app_${{ env.sanitized_arch }}
+
+  create-release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+
+      - name: download artifacts
+        uses: actions/download-artifact@v2
+
+      - name: create release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: release-${{ github.run_id }}
+          files: ./app_*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
