@@ -4,3 +4,4 @@
 .env*
 .vscode
 logs
+build

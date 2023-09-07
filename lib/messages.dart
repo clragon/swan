@@ -10,7 +10,7 @@ String helpMessage() {
       'followed by your SWA code.\n\n'
       'Example:\n'
       '```\n'
-      '.swan > Column > [ Center > Icon(Icons.help), Text(\'Hello, world!\') ]'
+      '.swa > Column > [ Center > Icon(Icons.help), Text(\'Hello, world!\') ]'
       '```\n';
 }
 
