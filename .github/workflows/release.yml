@@ -71,19 +71,11 @@ jobs:
       - name: download artifacts
         uses: actions/download-artifact@v3
 
-      - name: move artifacts
-        run: |
-          for dir in app_*; do
-            if [ -d "$dir" ]; then
-              mv "$dir"/* .
-            fi
-          done
-
       - name: create release
         id: create_release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: release-${{ github.run_id }}
-          files: ./app_*
+          files: ./app_*/app_*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
