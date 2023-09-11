@@ -10,6 +10,7 @@ dependencies:
   analyzer: ^6.2.0
   dart_style: ^2.3.2
   dotenv: ^4.1.0
+  http: ^1.1.0
   intl: ^0.18.1
   logging: ^1.2.0
   meta: ^1.9.1

@@ -37,8 +37,10 @@ To trigger a code generation from the bot,
   (You may also specify a file name before the dot.)  
   e.g. `.swa > Column [ Text('Hello, world!') ]`  
   or `hello_world.swa > Text('Hello, world!')`
-- (_TODO_) add one or multiple code blocks to your message which use `swa` as the language identifier
-- (_TODO_) upload one or multiple files with the `.swa` extension
+- add one or multiple code blocks to your message which use `swa` as the language identifier
+- upload one or multiple files with the `.swa` extension
+
+A maximum of 5 sources of SWA code will be processed per message.
 
 To see the help message, send a message with just `.swa` in it.
 
