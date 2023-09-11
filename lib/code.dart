@@ -1,4 +1,4 @@
-import 'package:swan/grammar.dart';
+import 'package:swan/simplewidget.dart';
 
 class SimpleWidgetCode extends SimpleWidgetAnnotation {
   SimpleWidgetCode({
