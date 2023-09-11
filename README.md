@@ -58,5 +58,5 @@ You can get one by creating a new application on the [Discord Developer Portal](
 Once you have a token, create a file named `.env` in the root directory of the project and add the following line to it:
 
 ```plaintext
-TOKEN=your_token_here
+DISCORD_BOT_TOKEN=your_token_here
 ```

@@ -133,10 +133,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.1.0"
   http_multi_server:
     dependency: transitive
     description:
@@ -186,7 +186,7 @@ packages:
     source: hosted
     version: "2.1.1"
   logging:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: logging
       sha256: "623a88c9594aa774443aa3eb2d41807a48486b5613e67599fb4c41c0ad47c340"
@@ -229,10 +229,10 @@ packages:
     dependency: "direct main"
     description:
       name: nyxx
-      sha256: d57ae6fb98ec62df53c44d1d80c3048e9229a756329d8f5b9ceafcc30e0ccd25
+      sha256: ee63a4ccece67a86abc70ffcfef52acecc457e8540a0d256f636085b9d8022e7
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.1"
+    version: "6.0.0-dev.2"
   package_config:
     dependency: transitive
     description:
@@ -289,6 +289,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  runtime_type:
+    dependency: transitive
+    description:
+      name: runtime_type
+      sha256: "3dcaf80cc98447a7b7b04e1f125fff805af796e7c5fc9d8d956933573d3a7eb1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   shelf:
     dependency: transitive
     description:

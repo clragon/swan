@@ -132,7 +132,7 @@ class SimpleWidgetAnnotationGrammer
         ref0(annotation),
       ].toChoiceParser();
 
-  Parser quote() => char(r"\").not() & (char("'") | char('"'));
+  Parser quote() => char(r'\').not() & (char("'") | char('"'));
 
   Parser<List<SimpleWidgetAnnotation>> children() => [
         [

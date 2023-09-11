@@ -1,0 +1,27 @@
+import 'package:nyxx/nyxx.dart';
+import 'package:swan/messages.dart';
+import 'package:swan/plugin.dart';
+
+class DeleteByReaction extends BotPlugin {
+  @override
+  String get name => 'DeleteByReaction';
+
+  @override
+  String? get helpText => 'Deletes messages when reacted to with 💀.';
+
+  Logger logger = Logger('DeleteByReaction');
+
+  @override
+  Future<void> onReady(NyxxGateway client) async {
+    Snowflake id = (await client.users.fetchCurrentUser()).id;
+    client.onMessageReactionAdd.listen((event) async {
+      Message message = await event.message.get();
+      if (message.author.id != id) return;
+      Snowflake? owner = message.referencedMessage?.author.id;
+      if (owner != event.userId) return;
+      if ((event.emoji as Emoji).name != '💀') return;
+      await message.delete();
+      logger.info('Deleted message 💀:\n${messageLink(message)}');
+    });
+  }
+}

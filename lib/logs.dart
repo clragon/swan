@@ -1,19 +1,7 @@
-import 'dart:io';
-import 'package:intl/intl.dart';
+import 'package:logging/logging.dart';
 
-enum LogLevel {
-  debug,
-  info,
-  warning,
-  error,
-}
-
-void log(
-  String message, {
-  LogLevel level = LogLevel.info,
-  Object? exception,
-  StackTrace? stackTrace,
-}) async {
+Future<void> logToFile(LogRecord event) async {
+  /*
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   final timestamp = DateTime.now().toString();
   final logLevel = level.name.toUpperCase();
@@ -40,4 +28,5 @@ void log(
 
   print(logMessage);
   await logFile.writeAsString('$logMessage\n', mode: FileMode.append);
+  */
 }
