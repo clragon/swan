@@ -90,6 +90,8 @@ class CompileSwa extends BotPlugin {
         }
       }
 
+      sources = sources.toSet().toList();
+
       if (sources.length > 5) {
         sources = sources.take(5).toList();
         await event.message.channel.sendMessage(
