@@ -14,7 +14,7 @@ dependencies:
   intl: ^0.18.1
   logging: ^1.2.0
   meta: ^1.9.1
-  nyxx: ^6.0.0-dev.2
+  nyxx: ^6.0.0-dev.3
   petitparser: ^6.0.1
   recase: ^4.1.0
 

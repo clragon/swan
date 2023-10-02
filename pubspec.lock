@@ -229,10 +229,18 @@ packages:
     dependency: "direct main"
     description:
       name: nyxx
-      sha256: ee63a4ccece67a86abc70ffcfef52acecc457e8540a0d256f636085b9d8022e7
+      sha256: c11ac9c36618a5096a9bd35da3aeb7eb4a5a214d88e92e9bd1015293ce1187d8
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0-dev.2"
+    version: "6.0.0-dev.3"
+  oauth2:
+    dependency: transitive
+    description:
+      name: oauth2
+      sha256: c4013ef62be37744efdc0861878fd9e9285f34db1f9e331cc34100d7674feb42
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.2"
   package_config:
     dependency: transitive
     description:

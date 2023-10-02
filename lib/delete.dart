@@ -12,14 +12,14 @@ class DeleteByReaction extends BotPlugin {
   Logger logger = Logger('DeleteByReaction');
 
   @override
-  Future<void> onReady(NyxxGateway client) async {
+  Future<void> afterConnect(NyxxGateway client) async {
     Snowflake id = (await client.users.fetchCurrentUser()).id;
     client.onMessageReactionAdd.listen((event) async {
       Message message = await event.message.get();
       if (message.author.id != id) return;
       Snowflake? owner = message.referencedMessage?.author.id;
       if (owner != event.userId) return;
-      if ((event.emoji as Emoji).name != '💀') return;
+      if (event.emoji.name != '💀') return;
       await message.delete();
       logger.info('Deleted message 💀:\n${messageLink(message)}');
     });

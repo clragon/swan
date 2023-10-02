@@ -51,7 +51,7 @@ class CompileSwa extends BotPlugin {
   }
 
   @override
-  FutureOr<void> onReady(covariant NyxxGateway client) {
+  FutureOr<void> afterConnect(covariant NyxxGateway client) {
     client.onMessageCreate.listen((event) async {
       if (event.message.author case User(isBot: true)) return;
       List<SwaSource> sources = [];

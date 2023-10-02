@@ -10,7 +10,7 @@ class Environment {
   });
 
   factory Environment.load() {
-    DotEnv env = DotEnv()..load();
+    DotEnv env = DotEnv(includePlatformEnvironment: true)..load();
     for (final param in _params) {
       if (!env.isDefined(param)) {
         throw EnvironmentException(param);

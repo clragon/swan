@@ -1,5 +1,7 @@
 # SWAN
 
+<img src="assets/icon.png" width="128" height="128"/>
+
 The Swan bot helps converting SWA to Dart code.
 
 ## Syntax

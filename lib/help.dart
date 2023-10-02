@@ -13,7 +13,7 @@ class HelpPlugin extends BotPlugin {
   Logger logger = Logger('HelpPlugin');
 
   @override
-  Future<void> onReady(NyxxGateway client) async {
+  Future<void> afterConnect(NyxxGateway client) async {
     List<BotPlugin> plugins =
         client.options.plugins.whereType<BotPlugin>().toList();
     client.onMessageCreate.listen((event) async {
