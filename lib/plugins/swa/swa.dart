@@ -8,11 +8,11 @@ import 'package:http/http.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:recase/recase.dart';
-import 'package:swan/code.dart';
-import 'package:swan/grammar.dart';
 import 'package:swan/messages.dart';
-import 'package:swan/plugin.dart';
-import 'package:swan/simplewidget.dart';
+import 'package:swan/plugins/base/plugin.dart';
+import 'package:swan/plugins/swa/code.dart';
+import 'package:swan/plugins/swa/grammar.dart';
+import 'package:swan/plugins/swa/simplewidget.dart';
 
 typedef SwaSource = ({String? name, String content});
 
@@ -51,7 +51,7 @@ class CompileSwa extends BotPlugin {
   }
 
   @override
-  FutureOr<void> afterConnect(covariant NyxxGateway client) {
+  FutureOr<void> afterConnect(NyxxGateway client) {
     client.onMessageCreate.listen((event) async {
       if (event.message.author case User(isBot: true)) return;
       List<SwaSource> sources = [];
@@ -169,7 +169,7 @@ class CompileSwa extends BotPlugin {
       output = 'final output = $output;';
       output = DartFormatter().format(output);
       output = output.replaceFirst('final output = ', '');
-      if (output.length < 2000) {
+      if (output.length < kMaxMessageLength) {
         await event.message.channel.sendMessage(
           MessageBuilder(
             content: '```dart\n$output\n```',

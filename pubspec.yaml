@@ -10,14 +10,20 @@ dependencies:
   analyzer: ^6.2.0
   dart_style: ^2.3.2
   dotenv: ^4.1.0
+  freezed_annotation: ^2.4.1
   http: ^1.1.0
   intl: ^0.18.1
+  json_annotation: ^4.8.1
   logging: ^1.2.0
   meta: ^1.9.1
   nyxx: ^6.0.0-dev.3
   petitparser: ^6.0.1
   recase: ^4.1.0
+  timeago: ^3.5.0
 
 dev_dependencies:
+  build_runner: ^2.4.6
+  freezed: ^2.4.3
+  json_serializable: ^6.7.1
   lints: ^2.0.0
   test: ^1.21.0

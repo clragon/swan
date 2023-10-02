@@ -1,6 +1,6 @@
 import 'package:nyxx/nyxx.dart';
 import 'package:swan/messages.dart';
-import 'package:swan/plugin.dart';
+import 'package:swan/plugins/base/plugin.dart';
 
 class DeleteByReaction extends BotPlugin {
   @override
