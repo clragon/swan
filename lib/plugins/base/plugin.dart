@@ -3,4 +3,6 @@ export 'package:nyxx/nyxx.dart' show NyxxGateway;
 
 abstract class BotPlugin extends NyxxPlugin<NyxxGateway> {
   String? helpText;
+
+  String? buildHelpText(NyxxGateway client) => helpText;
 }

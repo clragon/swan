@@ -31,7 +31,7 @@ class CompileSwa extends BotPlugin {
 
   final Parser parser = SimpleWidgetAnnotationGrammer().build();
 
-  final Logger logger = Logger('CompileSwa');
+  late final Logger logger = Logger(name);
 
   final Client http = Client();
 

@@ -7,9 +7,9 @@ class DeleteByReaction extends BotPlugin {
   String get name => 'DeleteByReaction';
 
   @override
-  String? get helpText => 'Deletes messages when reacted to with 💀.';
+  String? get helpText => 'Delete bot messages by reacting to them with 💀.';
 
-  Logger logger = Logger('DeleteByReaction');
+  late Logger logger = Logger(name);
 
   @override
   Future<void> afterConnect(NyxxGateway client) async {

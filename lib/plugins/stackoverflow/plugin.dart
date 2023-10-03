@@ -9,12 +9,15 @@ import 'package:swan/plugins/stackoverflow/post.dart';
 
 class StackOverflowMirror extends BotPlugin {
   @override
-  String get name => 'StackOverflowMirror';
+  String get name => 'StackOverflow';
 
   @override
-  String? get helpText => 'Retrieve a StackOverflow post by link.\n'
-      'Either directly use the command `flow <link>`\n'
-      'or reply to a message with `flow`';
+  String? buildHelpText(NyxxGateway client) {
+    String commandPrefix = client.env.commandPrefix;
+    return 'Print a StackOverflow post by link.\n\n'
+        '- Using the command `${commandPrefix}flow <link>`\n'
+        '- Reply to a message containing a StackOverflow link with `${commandPrefix}flow`';
+  }
 
   @override
   FutureOr<void> afterConnect(NyxxGateway client) {

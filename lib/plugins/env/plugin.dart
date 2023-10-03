@@ -51,7 +51,12 @@ class EnvironmentPlugin extends BotPlugin {
   EnvironmentPlugin(this.env);
 
   @override
-  String get name => 'EnvPlugin';
+  String get name => 'Environment';
+
+  @override
+  String? buildHelpText(NyxxGateway client) =>
+      '\n- Command prefix: `${client.env.commandPrefix}`'
+      '\n- Stack Exchange Api: `${client.env.stackExchangeKey != null ? 'available' : 'limited'}`';
 
   final Environment env;
 }

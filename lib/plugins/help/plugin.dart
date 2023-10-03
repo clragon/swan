@@ -37,13 +37,15 @@ class HelpPlugin extends BotPlugin {
         StringBuffer buffer = StringBuffer();
         buffer.writeln('## Help');
         for (final plugin in plugins) {
-          if (plugin.helpText == null) continue;
+          String? helpText = plugin.buildHelpText(client);
+          if (helpText == null) continue;
           buffer.writeln('### ${plugin.name.titleCase}');
-          buffer.writeln(plugin.helpText);
+          buffer.writeln(helpText);
         }
         await event.message.channel.sendMessage(
           MessageBuilder(
-            content: buffer.toString(),
+            // TODO: Handle messages that are too long.
+            content: buffer.toString().split('').take(kMaxMessageLength).join(),
             replyId: event.message.id,
             allowedMentions: AllowedMentions(repliedUser: false),
           ),
