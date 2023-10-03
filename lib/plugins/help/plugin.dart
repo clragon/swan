@@ -21,7 +21,7 @@ class HelpPlugin extends BotPlugin {
         status: CurrentUserStatus.online,
         activities: [
           ActivityBuilder(
-            name: 'Generating code | ${commandPrefix}swan',
+            name: 'Generating code | ${commandPrefix}help',
             type: ActivityType.game,
           ),
         ],
@@ -32,7 +32,7 @@ class HelpPlugin extends BotPlugin {
         client.options.plugins.whereType<BotPlugin>().toList();
     client.onMessageCreate.listen((event) async {
       if (event.message.author case User(isBot: true)) return;
-      if (RegExp(r'^' + RegExp.escape(commandPrefix) + r'swan')
+      if (RegExp(r'^' + RegExp.escape(commandPrefix) + r'help')
           .hasMatch(event.message.content)) {
         StringBuffer buffer = StringBuffer();
         buffer.writeln('## Help');
