@@ -101,3 +101,9 @@ For additional plugins, you may need to provide extra API keys:
 STACKEXCHANGE_API_KEY=your_key_here # optional, but recommended
 PASTEBIN_API_KEY=your_key_here # required for the pastebin plugin
 ```
+
+You can also specify a custom prefix for the bot:
+
+```yml
+BOT_PREFIX=your_prefix_here # default: .
+```

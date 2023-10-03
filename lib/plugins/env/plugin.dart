@@ -20,8 +20,12 @@ class Environment {
       }
     }
     List<String> params = _params.keys.toList();
+    String? prefix = env[params[0]];
+    if (prefix == null || prefix.isEmpty) {
+      prefix = '.';
+    }
     return Environment(
-      commandPrefix: env[params[0]] ?? '.',
+      commandPrefix: prefix,
       discordToken: env[params[1]]!,
       stackExchangeApiKey: env[params[2]],
       pastebinApiKey: env[params[3]],
