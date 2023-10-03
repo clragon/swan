@@ -63,7 +63,7 @@ This feature works better with an API key. See [Setup](#setup).
 
 To trigger a StackOverflow question mirror,
 
-- begin your message with `.flow` followed by the question ID.
+- begin your message with `.flow` followed by a StackOverflow link.
 - reply to a message containing a StackOverflow link with `.flow`.
 
 ### Pastebin Uploader
