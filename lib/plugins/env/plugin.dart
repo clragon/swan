@@ -47,8 +47,8 @@ class EnvironmentException implements Exception {
   String toString() => 'Missing environment variable: $param';
 }
 
-class EnvPlugin extends BotPlugin {
-  EnvPlugin(this.env);
+class EnvironmentPlugin extends BotPlugin {
+  EnvironmentPlugin(this.env);
 
   @override
   String get name => 'EnvPlugin';
@@ -58,7 +58,8 @@ class EnvPlugin extends BotPlugin {
 
 extension EnvironmentPluginAccess on NyxxGateway {
   Environment get env {
-    Environment? env = options.plugins.whereType<EnvPlugin>().firstOrNull?.env;
+    Environment? env =
+        options.plugins.whereType<EnvironmentPlugin>().firstOrNull?.env;
     if (env == null) {
       throw StateError('Tried to access Environment, but no EnvPlugin found.');
     }

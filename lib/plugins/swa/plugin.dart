@@ -12,7 +12,7 @@ import 'package:swan/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 import 'package:swan/plugins/swa/code.dart';
 import 'package:swan/plugins/swa/grammar.dart';
-import 'package:swan/plugins/swa/simplewidget.dart';
+import 'package:swan/plugins/swa/model.dart';
 
 typedef SwaSource = ({String? name, String content});
 

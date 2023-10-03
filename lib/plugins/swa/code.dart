@@ -1,4 +1,4 @@
-import 'package:swan/plugins/swa/simplewidget.dart';
+import 'package:swan/plugins/swa/model.dart';
 
 class SimpleWidgetCode extends SimpleWidgetAnnotation {
   SimpleWidgetCode({

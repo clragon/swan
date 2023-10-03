@@ -1,9 +1,9 @@
 import 'package:nyxx/nyxx.dart';
-import 'package:swan/plugins/env/env.dart';
-import 'package:swan/plugins/help/help.dart';
-import 'package:swan/plugins/skull/delete.dart';
+import 'package:swan/plugins/env/plugin.dart';
+import 'package:swan/plugins/help/plugin.dart';
+import 'package:swan/plugins/skull/plugin.dart';
 import 'package:swan/plugins/stackoverflow/plugin.dart';
-import 'package:swan/plugins/swa/swa.dart';
+import 'package:swan/plugins/swa/plugin.dart';
 
 Future<void> main() async {
   Environment env = Environment.load();
@@ -17,7 +17,7 @@ Future<void> main() async {
         Logging(),
         CliIntegration(),
         IgnoreExceptions(),
-        EnvPlugin(env),
+        EnvironmentPlugin(env),
         HelpPlugin(),
         DeleteByReaction(),
         CompileSwa(),

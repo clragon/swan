@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:nyxx/nyxx.dart';
 import 'package:swan/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
-import 'package:swan/plugins/env/env.dart';
+import 'package:swan/plugins/env/plugin.dart';
 import 'package:swan/plugins/stackoverflow/client.dart';
 import 'package:swan/plugins/stackoverflow/post.dart';
 

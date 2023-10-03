@@ -1,5 +1,5 @@
 import 'package:petitparser/petitparser.dart';
-import 'package:swan/plugins/swa/simplewidget.dart';
+import 'package:swan/plugins/swa/model.dart';
 
 class SimpleWidgetAnnotationGrammer
     extends GrammarDefinition<SimpleWidgetAnnotation> {
