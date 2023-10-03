@@ -13,21 +13,21 @@ class StackOverflowMirror extends BotPlugin {
 
   @override
   String? buildHelpText(NyxxGateway client) {
-    String commandPrefix = client.env.commandPrefix;
+    String prefix = client.env.commandPrefix;
     return 'Print a StackOverflow post by link.\n\n'
-        '- Using the command `${commandPrefix}flow <link>`\n'
-        '- Reply to a message containing a StackOverflow link with `${commandPrefix}flow`';
+        '- Using the command `${prefix}flow <link>`\n'
+        '- Reply to a message containing a StackOverflow link with `${prefix}flow`';
   }
 
   @override
   FutureOr<void> afterConnect(NyxxGateway client) {
-    String commandPrefix = client.env.commandPrefix;
+    String prefix = client.env.commandPrefix;
     RegExp links = RegExp(
       r'https:\/\/stackoverflow\.com\/questions\/\d+\/\S+',
     );
     RegExp command = RegExp(
       r'^' +
-          RegExp.escape(commandPrefix) +
+          RegExp.escape(prefix) +
           r'flow\s*' +
           r'(?<link>' +
           links.pattern +
@@ -51,7 +51,7 @@ class StackOverflowMirror extends BotPlugin {
           try {
             Uri uri = Uri.parse(link);
             StackOverflowClient stackOverflowClient = StackOverflowClient(
-              apiKey: client.env.stackExchangeKey,
+              apiKey: client.env.stackExchangeApiKey,
             );
             int id = int.parse(uri.pathSegments[1]);
             try {

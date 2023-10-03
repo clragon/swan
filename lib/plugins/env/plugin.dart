@@ -7,7 +7,8 @@ class Environment {
   const Environment({
     required this.commandPrefix,
     required this.discordToken,
-    this.stackExchangeKey,
+    this.stackExchangeApiKey,
+    this.pastebinApiKey,
   });
 
   factory Environment.load() {
@@ -22,7 +23,8 @@ class Environment {
     return Environment(
       commandPrefix: env[params[0]] ?? '.',
       discordToken: env[params[1]]!,
-      stackExchangeKey: env[params[2]],
+      stackExchangeApiKey: env[params[2]],
+      pastebinApiKey: env[params[3]],
     );
   }
 
@@ -30,12 +32,14 @@ class Environment {
   static const Map<String, bool> _params = {
     'COMMAND_PREFIX': false,
     'DISCORD_BOT_TOKEN': true,
-    'STACK_EXCHANGE_KEY': false,
+    'STACKEXCHANGE_API_KEY': false,
+    'PASTEBIN_API_KEY': false,
   };
 
   final String commandPrefix;
   final String discordToken;
-  final String? stackExchangeKey;
+  final String? stackExchangeApiKey;
+  final String? pastebinApiKey;
 }
 
 class EnvironmentException implements Exception {
@@ -56,7 +60,8 @@ class EnvironmentPlugin extends BotPlugin {
   @override
   String? buildHelpText(NyxxGateway client) =>
       '\n- Command prefix: `${client.env.commandPrefix}`'
-      '\n- Stack Exchange Api: `${client.env.stackExchangeKey != null ? 'available' : 'limited'}`';
+      '\n- Stack Exchange Api: `${client.env.stackExchangeApiKey != null ? 'available' : 'limited'}`'
+      '\n- Pastebin Api: `${client.env.pastebinApiKey != null ? 'available' : 'unavailable'}`';
 
   final Environment env;
 }

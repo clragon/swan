@@ -2,13 +2,19 @@
 
 <img src="assets/icon.png" width="128" height="128"/>
 
-The Swan bot helps converting SWA to Dart code.
+Swan helps bring elegance to your flutter discussions.
 
-## Syntax
+## Plugins
+
+### Simple Widget Annotation
+
+Quickly generate Flutter widget trees from a simple text-based syntax.
+
+#### Syntax
 
 Simple Widget Annotation (SWA) is a text-based syntax that allows you to describe Flutter widget trees in a concise manner.
 
-### Example
+#### Example
 
 ```plaintext
 Column > [ Center > Icon(Icons.help), Text('Hello, world!') ]
@@ -31,7 +37,7 @@ SWA syntax is flexible.
 You may omit or add as many spaces or newlines as you like.
 You may also omit the `>` character before a list of children.
 
-## Usage
+#### Usage
 
 To trigger a code generation from the bot,
 
@@ -48,6 +54,30 @@ To see the help message, send a message with just `.swa` in it.
 
 To delete the bot's response, react to it with the 💀 emoji.
 
+### StackOverflow Mirror
+
+Print StackOverflow questions in a Discord channel.  
+This feature works better with an API key. See [Setup](#setup).
+
+#### Usage
+
+To trigger a StackOverflow question mirror,
+
+- begin your message with `.flow` followed by the question ID.
+- reply to a message containing a StackOverflow link with `.flow`.
+
+### Pastebin Uploader
+
+Upload files to Pastebin.
+This feature requires an API key. See [Setup](#setup).
+
+#### Usage
+
+To upload a file to Pastebin,
+
+- begin your message with `.paste`, and attach a file (or multiple) to it.
+- reply to a message containing a file (or multiple) with `.paste`.
+
 ## Dependencies
 
 - [Nyxx Discord API library](https://pub.dev/packages/nyxx)
@@ -61,6 +91,13 @@ You can get one by creating a new application on the [Discord Developer Portal](
 
 Once you have a token, create a file named `.env` in the root directory of the project and add the following line to it:
 
-```plaintext
+```yml
 DISCORD_BOT_TOKEN=your_token_here
+```
+
+For additional plugins, you may need to provide extra API keys:
+
+```yml
+STACKEXCHANGE_API_KEY=your_key_here # optional, but recommended
+PASTEBIN_API_KEY=your_key_here # required for the pastebin plugin
 ```

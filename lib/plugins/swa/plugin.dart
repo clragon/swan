@@ -4,7 +4,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dart_style/dart_style.dart';
-import 'package:http/http.dart';
+import 'package:mime/mime.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:recase/recase.dart';
@@ -29,11 +29,9 @@ class CompileSwa extends BotPlugin {
       '.swa > Column > [ Center > Icon(Icons.help), Text(\'Hello, world!\') ]\n'
       '```';
 
+  static const int _maxFileSize = 2 * 1024 * 1024;
+
   final Parser parser = SimpleWidgetAnnotationGrammer().build();
-
-  late final Logger logger = Logger(name);
-
-  final Client http = Client();
 
   /// Builds the error message for when a parsing error occurs.
   String failureToMessage(String content, Failure failure) {
@@ -80,15 +78,39 @@ class CompileSwa extends BotPlugin {
       }
 
       for (final attachment in event.message.attachments) {
-        if (attachment.size > 1024 * 1024 * 2) continue;
-        if (attachment.fileName.endsWith('.swa')) {
-          String content =
-              await http.get(attachment.url).then((value) => value.body);
-          sources.add((
-            name: attachment.fileName.pascalCase,
-            content: content,
-          ));
+        if (!attachment.fileName.endsWith('.swa')) continue;
+        if (attachment.size > _maxFileSize) {
+          await event.message.channel.sendMessage(
+            MessageBuilder(
+              content:
+                  'To balance server load, we limit the size of files to {$_maxFileSize}.\n'
+                  'File ${attachment.fileName} is too large (${attachment.size} bytes).',
+              replyId: event.message.id,
+              allowedMentions: AllowedMentions(repliedUser: false),
+            ),
+          );
+          logger.warning(
+            'File size too large: ${attachment.size} > 2MB:\n${event.link}',
+          );
+          return;
         }
+        Uint8List bytes = await attachment.fetch();
+        String? type = lookupMimeType(attachment.fileName, headerBytes: bytes);
+        if (type == null || !type.startsWith('text/')) {
+          await event.message.channel.sendMessage(
+            MessageBuilder(
+              content:
+                  'We only support text files. File ${attachment.fileName} is not a text file.',
+              replyId: event.message.id,
+              allowedMentions: AllowedMentions(repliedUser: false),
+            ),
+          );
+        }
+        String content = utf8.decode(bytes);
+        sources.add((
+          name: attachment.fileName.pascalCase,
+          content: content,
+        ));
       }
 
       sources = sources.toSet().toList();
