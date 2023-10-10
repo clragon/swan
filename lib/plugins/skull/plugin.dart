@@ -9,12 +9,13 @@ class DeleteByReaction extends BotPlugin {
   @override
   String? get helpText => 'Delete bot messages by reacting to them with 💀.';
 
+  @override
   late Logger logger = Logger(name);
 
   @override
   Future<void> afterConnect(NyxxGateway client) async {
-    Snowflake id = (await client.users.fetchCurrentUser()).id;
     client.onMessageReactionAdd.listen((event) async {
+      Snowflake id = (await client.users.fetchCurrentUser()).id;
       Message message = await event.message.get();
       if (message.author.id != id) return;
       Snowflake? owner = message.referencedMessage?.author.id;

@@ -29,8 +29,8 @@ class PasteFiles extends BotPlugin {
   @override
   FutureOr<void> afterConnect(NyxxGateway client) async {
     if (!isEnabled(client)) return;
-    String prefix = client.env.commandPrefix;
     client.onMessageCreate.listen((event) async {
+      String prefix = client.env.commandPrefix;
       if (event.message.author case User(isBot: true)) return;
       RegExp regex = RegExp(r'^' + RegExp.escape(prefix) + r'paste$');
       if (!regex.hasMatch(event.message.content)) return;

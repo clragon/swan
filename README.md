@@ -41,10 +41,8 @@ You may also omit the `>` character before a list of children.
 
 To trigger a code generation from the bot,
 
-- begin your message with `.swa >` followed by the SWA code.  
-  (You may also specify a file name before the dot.)  
-  e.g. `.swa > Column [ Text('Hello, world!') ]`  
-  or `hello_world.swa > Text('Hello, world!')`
+- begin your message with `.swa` followed by the SWA code.  
+  e.g. `.swa Column [ Text('Hello, world!') ]`
 - add one or multiple code blocks to your message which use `swa` as the language identifier
 - upload one or multiple files with the `.swa` extension
 

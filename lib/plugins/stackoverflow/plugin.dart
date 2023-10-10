@@ -21,19 +21,19 @@ class StackOverflowMirror extends BotPlugin {
 
   @override
   FutureOr<void> afterConnect(NyxxGateway client) {
-    String prefix = client.env.commandPrefix;
-    RegExp links = RegExp(
-      r'https:\/\/stackoverflow\.com\/questions\/\d+\/\S+',
-    );
-    RegExp command = RegExp(
-      r'^' +
-          RegExp.escape(prefix) +
-          r'flow\s*' +
-          r'(?<link>' +
-          links.pattern +
-          r')?',
-    );
     client.onMessageCreate.listen((event) async {
+      String prefix = client.env.commandPrefix;
+      RegExp links = RegExp(
+        r'https:\/\/stackoverflow\.com\/questions\/\d+\/\S+',
+      );
+      RegExp command = RegExp(
+        r'^' +
+            RegExp.escape(prefix) +
+            r'flow\s*' +
+            r'(?<link>' +
+            links.pattern +
+            r')?',
+      );
       if (event.message.author case User(isBot: true)) return;
       RegExpMatch? commandMatch = command.firstMatch(event.message.content);
       if (commandMatch != null) {
