@@ -4,7 +4,7 @@ const kMaxMessageLength = 2000;
 
 /// Builds the error message for when an unhandled exception occurs.
 String errorMessage(Object? exception, StackTrace? stackTrace) {
-  return 'Something went wrong. :(\n'
+  return 'Something went wrong :(\n'
       'Please contact an administator. '
       'Your error id is: `#${exception.hashCode}`';
 }
