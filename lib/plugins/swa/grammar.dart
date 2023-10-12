@@ -14,20 +14,14 @@ class SimpleWidgetAnnotationGrammer
         ref0(token),
         [
           [
-            ref0(whitespace),
-            char('>'),
-            ref0(whitespace),
+            char('>').withWhitespace(),
             ref0(tokenChain),
           ].toSequenceParser().pick(3),
           [
-            ref0(whitespace),
-            char('>').optional(),
-            ref0(whitespace),
-            char('['),
-            ref0(whitespace),
+            char('>').withWhitespace().optional(),
+            char('[').withWhitespace(),
             ref0(tokenList),
-            ref0(whitespace),
-            char(']'),
+            char(']').withWhitespace(),
           ].toSequenceParser().pick(6),
         ].toChoiceParser(),
       ].toSequenceParser().map(
@@ -40,11 +34,9 @@ class SimpleWidgetAnnotationGrammer
   Parser<SimpleWidgetChildren> tokenList() => [
         ref0(token),
         [
-          ref0(whitespace),
-          char(','),
-          ref0(whitespace),
+          char(',').withWhitespace(),
           ref0(token),
-        ].toSequenceParser().pick(3).star(),
+        ].toSequenceParser().pick(1).star(),
       ].toSequenceParser().map(
             (value) => SimpleWidgetChildren([
               value[0] as SimpleWidgetToken,
@@ -68,12 +60,9 @@ class SimpleWidgetAnnotationGrammer
         ref0(identifierChain),
         ref0(whitespace),
         ref0(generics),
-        ref0(whitespace),
-        char('('),
-        ref0(whitespace),
+        char('(').withWhitespace(),
         ref0(parameterList),
-        ref0(whitespace),
-        char(')'),
+        char(')').withWhitespace(),
       ].toSequenceParser().map((value) => value).cast();
 
   /// <Generics> ::= "<" <Whitespace> <TypeList> <Whitespace> ">"
@@ -91,14 +80,11 @@ class SimpleWidgetAnnotationGrammer
 
   /// <ParameterList> ::= <Parameter> <Whitespace> "," <Whitespace> <ParameterList> | <Parameter>
   Parser<List<SimpleWidgetToken>> parameterList() => [
-        ref0(whitespace),
         ref0(parameter),
         [
-          ref0(whitespace),
-          char(','),
-          ref0(whitespace),
+          char(',').withWhitespace(),
           ref0(parameter),
-        ].toSequenceParser().pick(3).star(),
+        ].toSequenceParser().pick(1).star(),
       ].toSequenceParser().map(
             (value) => [
               value[0] as SimpleWidgetToken,
@@ -117,11 +103,9 @@ class SimpleWidgetAnnotationGrammer
   Parser<SimpleWidgetToken> namedParameter() => <Parser>[
         [
           ref0(identifier),
-          ref0(whitespace),
           // optional, so we can also parse typed parameters
-          char(':').optional(),
-          ref0(whitespace),
-        ].toSequenceParser(),
+          char(':').withWhitespace().optional(),
+        ].toSequenceParser().flatten(),
         [
           ref0(token),
           ref0(expression),
@@ -134,21 +118,15 @@ class SimpleWidgetAnnotationGrammer
           .cast();
 
   Parser<SimpleWidgetTernary> ternary() => [
+        ref0(expression),
         [
+          char('?').withWhitespace(),
           ref0(expression),
-          ref0(whitespace),
-        ].toSequenceParser(),
+        ].toSequenceParser().pick(1),
         [
-          char('?'),
-          ref0(whitespace),
+          char(':').withWhitespace(),
           ref0(expression),
-          ref0(whitespace),
-        ].toSequenceParser(),
-        [
-          char(':'),
-          ref0(whitespace),
-          ref0(expression),
-        ].toSequenceParser(),
+        ].toSequenceParser().pick(1),
       ].toSequenceParser().map(
             (value) => SimpleWidgetTernary(
               value[0] as SimpleWidgetToken,
@@ -159,19 +137,12 @@ class SimpleWidgetAnnotationGrammer
 
   Parser<SimpleWidgetElement> anonymousFunction() => [
         [
-          char('('),
-          ref0(whitespace),
+          char('(').withWhitespace(),
           ref0(parameterList),
-          ref0(whitespace),
-          char(')'),
-          ref0(whitespace),
+          char(')').withWhitespace(),
+          char('=>').withWhitespace(),
         ].toSequenceParser().flatten(),
-        [
-          char('=>'),
-          ref0(whitespace),
-          ref0(tokenChain),
-          ref0(whitespace),
-        ].toSequenceParser().pick(2),
+        ref0(tokenChain),
       ].toSequenceParser().map(
             (value) => SimpleWidgetElement(
               value[0] as String,
@@ -181,20 +152,14 @@ class SimpleWidgetAnnotationGrammer
 
   Parser<SimpleWidgetToken> array() => [
         [
-          char('['),
-          ref0(whitespace),
+          char('[').withWhitespace(),
           ref0(expression),
-        ].toSequenceParser().pick(2),
+        ].toSequenceParser().pick(1),
         [
-          ref0(whitespace),
-          char(','),
-          ref0(whitespace),
+          char(',').withWhitespace(),
           ref0(expression),
-        ].toSequenceParser().pick(3).star(),
-        [
-          ref0(whitespace),
-          char(']'),
-        ].toSequenceParser(),
+        ].toSequenceParser().pick(1).star(),
+        char(']').withWhitespace(),
       ].toSequenceParser().map(
             (value) => SimpleWidgetChildren([
               value[0] as SimpleWidgetToken,
@@ -211,9 +176,7 @@ class SimpleWidgetAnnotationGrammer
   Parser<String> identifierChain() => [
         ref0(identifier),
         [
-          ref0(whitespace),
-          char('.'),
-          ref0(whitespace),
+          char('.').withWhitespace(),
           ref0(identifierChain),
         ].toSequenceParser().star(),
       ].toSequenceParser().flatten();
@@ -223,7 +186,12 @@ class SimpleWidgetAnnotationGrammer
 
   /// <AlphaNumChar> ::= [a-z] | [A-Z] | [0-9]
   Parser<String> alphaNumeric() => (letter() | digit()).plus().flatten();
+}
 
-  /// <Whitespace> ::= (" " | "\n")*
-  Parser<String> whitespace() => (char(' ') | char('\n')).star().flatten();
+extension Whitespaced on Parser {
+  Parser<dynamic> withWhitespace() => <Parser>[
+        [whitespace(), newline()].toChoiceParser().star(),
+        this,
+        [whitespace(), newline()].toChoiceParser().star(),
+      ].toSequenceParser();
 }
