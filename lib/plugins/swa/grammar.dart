@@ -14,7 +14,7 @@ class SimpleWidgetAnnotationGrammer
         endOfInput()
       ).toSequenceParser().map((e) => e.$1);
 
-  Parser<SimpleWidgetAnnotation> token() => <Parser>[
+  Parser<SimpleWidgetAnnotation> token() => (
         [
           ref0(functionCall),
           ref0(identifierChain).map((value) => (value, null)),
@@ -23,19 +23,19 @@ class SimpleWidgetAnnotationGrammer
           (
             char('>').spaced(),
             ref0(token),
-          ).toSequenceParser().map((e) => e.$1),
+          ).toSequenceParser().map((e) => e.$2),
           (
             char('>').spaced().optional(),
             char('[').spaced(),
             ref0(tokenList).optional(),
             char(']').spaced(),
-          ).toSequenceParser().map((e) => e.$2),
+          ).toSequenceParser().map((e) => e.$3),
         ].toChoiceParser().optional(),
-      ].toSequenceParser().map(
+      ).toSequenceParser().map(
             (value) => SimpleWidgetAnnotation(
-              name: (value[0] as TokenHead).$1,
-              parameters: (value[0] as TokenHead).$2,
-              child: value[1] as SimpleWidgetToken?,
+              name: value.$1.$1,
+              parameters: value.$1.$2,
+              child: value.$2,
             ),
           );
 
