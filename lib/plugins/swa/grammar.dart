@@ -5,14 +5,14 @@ class SimpleWidgetAnnotationGrammer
     extends GrammarDefinition<SimpleWidgetAnnotation> {
   /// <SWA> ::= <Whitespace> <TokenChain> <Whitespace>
   @override
-  Parser<SimpleWidgetAnnotation> start() => [
-        [
+  Parser<SimpleWidgetAnnotation> start() => (
+        (
           ref0(space),
           ref0(token),
           ref0(space),
-        ].toSequenceParser().pick(1),
+        ).toSequenceParser().map((e) => e.$2),
         endOfInput()
-      ].toSequenceParser().pick(0).cast();
+      ).toSequenceParser().map((e) => e.$1);
 
   Parser<SimpleWidgetAnnotation> token() => <Parser>[
         [
@@ -20,16 +20,16 @@ class SimpleWidgetAnnotationGrammer
           ref0(identifierChain).map((value) => (value, null)),
         ].toChoiceParser(),
         [
-          [
+          (
             char('>').spaced(),
             ref0(token),
-          ].toSequenceParser().pick(1),
-          [
+          ).toSequenceParser().map((e) => e.$1),
+          (
             char('>').spaced().optional(),
             char('[').spaced(),
             ref0(tokenList).optional(),
             char(']').spaced(),
-          ].toSequenceParser().pick(2),
+          ).toSequenceParser().map((e) => e.$2),
         ].toChoiceParser().optional(),
       ].toSequenceParser().map(
             (value) => SimpleWidgetAnnotation(
@@ -39,84 +39,83 @@ class SimpleWidgetAnnotationGrammer
             ),
           );
 
-  Parser<SimpleWidgetChildren> tokenList() => [
+  Parser<SimpleWidgetChildren> tokenList() => (
         ref0(token),
-        [
+        (
           char(',').spaced(),
           ref0(token),
-        ].toSequenceParser().pick(1).star().castList<SimpleWidgetAnnotation>(),
+        )
+            .toSequenceParser()
+            .map((e) => e.$2)
+            .star()
+            .castList<SimpleWidgetAnnotation>(),
         char(',').spaced().optional(),
-      ].toSequenceParser().map(
+      ).toSequenceParser().map(
             (value) => SimpleWidgetChildren([
-              value[0] as SimpleWidgetToken,
-              ...value[1] as List<SimpleWidgetToken>,
+              value.$1,
+              ...value.$2,
             ]),
           );
 
   /// <FunctionCall> ::= <Identifier> <Whitespace> <Generics>? <Whitespace> "(" <Whitespace> <ParameterList>? <Whitespace> ")"
   Parser<TokenHead> functionCall() {
-    return [
-      [
+    return (
+      (
         ref0(identifierChain),
         ref0(space),
         ref0(generics).optional(),
-      ].toSequenceParser().flatten(),
-      [
+      ).toSequenceParser().flatten(),
+      (
         char('(').spaced(),
         ref0(parameterList),
         char(')').spaced(),
-      ].toSequenceParser().pick(1),
-    ].toSequenceParser().map(
-          (value) => (
-            value[0] as String,
-            value[1] as List<SimpleWidgetToken>,
-          ),
-        );
+      ).toSequenceParser().map((e) => e.$2),
+    ).toSequenceParser();
   }
 
   /// <Generics> ::= "<" <Whitespace> <TypeList> <Whitespace> ">"
-  Parser<String> generics() => [
+  Parser<String> generics() => (
         char('<'),
         ref0(typeList),
         char('>'),
-      ].toSequenceParser().flatten();
+      ).toSequenceParser().flatten();
 
   /// <TypeList> ::= <Identifier> <Whitespace> "," <Whitespace> <TypeList> | <Identifier>
-  Parser<String> typeList() => [
+  Parser<String> typeList() => (
         ref0(space),
         ref0(identifier),
         ref0(space),
-      ].toSequenceParser().plusSeparated(char(',')).flatten();
+      ).toSequenceParser().plusSeparated(char(',')).flatten();
 
   /// <ParameterList> ::= <Parameter> <Whitespace> "," <Whitespace> <ParameterList> | <Parameter>
-  Parser<List<SimpleWidgetToken>> parameterList() => [
+  Parser<List<SimpleWidgetToken>> parameterList() => (
         ref0(parameter).starSeparated(char(',')).map((value) => value.elements),
         char(',').spaced().optional(),
-      ].toSequenceParser().pick(0).castList<SimpleWidgetToken>();
+      ).toSequenceParser().map((e) => e.$1);
 
   Parser<SimpleWidgetToken> value() => [
         ref0(expression),
         ref0(token),
-      ].toChoiceParser().cast();
+      ].toChoiceParser();
 
   /// <Parameter> ::= <NamedParam> | <Token> | <Expression>
   Parser<SimpleWidgetToken> parameter() => [
         ref0(namedParameter),
         ref0(value),
-      ].toChoiceParser().cast();
+      ].toChoiceParser();
 
   /// <NamedParameter> ::= <Identifier> <Whitespace> ":" <Whitespace> <Parameter>
-  Parser<SimpleWidgetToken> namedParameter() => <Parser>[
-        [
+  Parser<SimpleWidgetToken> namedParameter() => (
+        (
           ref0(identifier),
           // optional, so we can also parse typed parameters
           char(':').spaced().optional(),
-        ].toSequenceParser().flatten(),
+        ).toSequenceParser().flatten(),
         [
           ref0(value),
         ].toChoiceParser(),
-      ].toSequenceParser().map(
-            (value) => SimpleWidgetElement(value[0], value[1]),
+      ).toSequenceParser().map(
+            (value) => SimpleWidgetElement(value.$1, value.$2),
           );
 
   Parser<SimpleWidgetToken> expression() => [
@@ -126,60 +125,50 @@ class SimpleWidgetAnnotationGrammer
         // ref0(anonymousFunction),
       ].toChoiceParser().cast();
 
-  Parser<SimpleWidgetTernary> ternary() => [
+  Parser<SimpleWidgetTernary> ternary() => (
         ref0(expression),
-        [
+        (
           char('?').spaced(),
           ref0(value),
-        ].toSequenceParser().pick(1),
-        [
+        ).toSequenceParser().map((e) => e.$2),
+        (
           char(':').spaced(),
           ref0(value),
-        ].toSequenceParser().pick(1),
-      ].toSequenceParser().map(
-            (value) => SimpleWidgetTernary(
-              value[0] as SimpleWidgetToken,
-              value[1] as SimpleWidgetToken,
-              value[2] as SimpleWidgetToken,
-            ),
+        ).toSequenceParser().map((e) => e.$2),
+      ).toSequenceParser().map(
+            (value) => SimpleWidgetTernary(value.$1, value.$2, value.$3),
           );
 
-  Parser<SimpleWidgetElement> anonymousFunction() => [
-        [
+  Parser<SimpleWidgetElement> anonymousFunction() => (
+        (
           char('(').spaced(),
           ref0(parameterList),
           char(')').spaced(),
           string('=>').spaced(),
-        ].toSequenceParser().flatten(),
+        ).toSequenceParser().flatten(),
         ref0(value),
-      ].toSequenceParser().map(
-            (value) => SimpleWidgetElement(
-              value[0] as String,
-              value[1] as SimpleWidgetToken,
-            ),
+      ).toSequenceParser().map(
+            (value) => SimpleWidgetElement(value.$1, value.$2),
           );
 
-  Parser<SimpleWidgetToken> array() => [
-        [
+  Parser<SimpleWidgetToken> array() => (
+        (
           char('[').spaced(),
           ref0(value),
-        ].toSequenceParser().pick(1),
-        [
+        ).toSequenceParser().map((e) => e.$2),
+        (
           char(',').spaced(),
           ref0(value),
-        ].toSequenceParser().pick(1).star(),
+        ).toSequenceParser().map((e) => e.$2).star(),
         char(']').spaced(),
-      ].toSequenceParser().map(
-            (value) => SimpleWidgetChildren([
-              value[0] as SimpleWidgetToken,
-              ...value[1] as List<SimpleWidgetToken>,
-            ]),
+      ).toSequenceParser().map(
+            (value) => SimpleWidgetChildren([value.$1, ...value.$2]),
           );
 
   Parser<SimpleWidgetLiteral> stringLiteral() => [
         (char('"') & any().starLazy(char('"')) & char('"')).pick(1),
         (char("'") & any().starLazy(char("'")) & char("'")).pick(1),
-      ].toChoiceParser().flatten().map((value) => SimpleWidgetLiteral(value));
+      ].toChoiceParser().flatten().map(SimpleWidgetLiteral.new);
 
   /// <IdentifierChain> ::= <Identifier> <Whitespace> "." <Whitespace> <IdentifierChain> | <Identifier>
   Parser<String> identifierChain() =>
@@ -191,12 +180,13 @@ class SimpleWidgetAnnotationGrammer
 
 typedef TokenHead = (String, List<SimpleWidgetToken>?);
 
-Parser<dynamic> space() => [whitespace(), newline()].toChoiceParser().star();
+Parser<String> space() =>
+    [whitespace(), newline()].toChoiceParser().star().flatten();
 
-extension Whitespaced on Parser {
-  Parser<dynamic> spaced() => <Parser>[
+extension Whitespaced<T> on Parser<T> {
+  Parser<(String, T, String)> spaced() => (
         ref0(space),
         this,
         ref0(space),
-      ].toSequenceParser();
+      ).toSequenceParser();
 }
