@@ -52,6 +52,7 @@ To see the help message, send a message with just `.swa` in it.
 
 The SWA parser is based on an EBNF grammar.
 
+// TODO: update grammar file to reflect parser changes  
 The full grammar is available [here](/lib/plugins/swa/grammar.ebnf).  
 You can test it on [this website](https://bnfplayground.pauliankline.com/).
 

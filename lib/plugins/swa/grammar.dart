@@ -6,27 +6,35 @@ class SimpleWidgetAnnotationGrammer
   /// <SWA> ::= <Whitespace> <TokenChain> <Whitespace>
   @override
   Parser<SimpleWidgetAnnotation> start() => [
-        (ref0(whitespace) & ref0(tokenChain) & ref0(whitespace)),
+        [
+          ref0(space),
+          ref0(token),
+          ref0(space),
+        ].toSequenceParser().pick(1),
         endOfInput()
       ].toSequenceParser().pick(0).cast();
 
-  Parser<SimpleWidgetAnnotation> tokenChain() => <Parser>[
-        ref0(token),
+  Parser<SimpleWidgetAnnotation> token() => <Parser>[
+        [
+          ref0(functionCall),
+          ref0(identifierChain).map((value) => (value, null)),
+        ].toChoiceParser(),
         [
           [
-            char('>').withWhitespace(),
-            ref0(tokenChain),
-          ].toSequenceParser().pick(3),
+            char('>').spaced(),
+            ref0(token),
+          ].toSequenceParser().pick(1),
           [
-            char('>').withWhitespace().optional(),
-            char('[').withWhitespace(),
-            ref0(tokenList),
-            char(']').withWhitespace(),
-          ].toSequenceParser().pick(6),
-        ].toChoiceParser(),
+            char('>').spaced().optional(),
+            char('[').spaced(),
+            ref0(tokenList).optional(),
+            char(']').spaced(),
+          ].toSequenceParser().pick(2),
+        ].toChoiceParser().optional(),
       ].toSequenceParser().map(
             (value) => SimpleWidgetAnnotation(
-              name: value[0] as String,
+              name: (value[0] as TokenHead).$1,
+              parameters: (value[0] as TokenHead).$2,
               child: value[1] as SimpleWidgetToken?,
             ),
           );
@@ -34,9 +42,10 @@ class SimpleWidgetAnnotationGrammer
   Parser<SimpleWidgetChildren> tokenList() => [
         ref0(token),
         [
-          char(',').withWhitespace(),
+          char(',').spaced(),
           ref0(token),
-        ].toSequenceParser().pick(1).star(),
+        ].toSequenceParser().pick(1).star().castList<SimpleWidgetAnnotation>(),
+        char(',').spaced().optional(),
       ].toSequenceParser().map(
             (value) => SimpleWidgetChildren([
               value[0] as SimpleWidgetToken,
@@ -44,26 +53,26 @@ class SimpleWidgetAnnotationGrammer
             ]),
           );
 
-  Parser<SimpleWidgetAnnotation> token() => [
-        ref0(identifierChain),
-        ref0(functionCall),
-      ].toChoiceParser().cast();
-
-  Parser<SimpleWidgetToken> expression() => [
-        ref0(stringLiteral),
-        ref0(functionCall),
-        ref0(ternary),
-      ].toChoiceParser().cast();
-
   /// <FunctionCall> ::= <Identifier> <Whitespace> <Generics>? <Whitespace> "(" <Whitespace> <ParameterList>? <Whitespace> ")"
-  Parser<SimpleWidgetToken> functionCall() => [
+  Parser<TokenHead> functionCall() {
+    return [
+      [
         ref0(identifierChain),
-        ref0(whitespace),
-        ref0(generics),
-        char('(').withWhitespace(),
+        ref0(space),
+        ref0(generics).optional(),
+      ].toSequenceParser().flatten(),
+      [
+        char('(').spaced(),
         ref0(parameterList),
-        char(')').withWhitespace(),
-      ].toSequenceParser().map((value) => value).cast();
+        char(')').spaced(),
+      ].toSequenceParser().pick(1),
+    ].toSequenceParser().map(
+          (value) => (
+            value[0] as String,
+            value[1] as List<SimpleWidgetToken>,
+          ),
+        );
+  }
 
   /// <Generics> ::= "<" <Whitespace> <TypeList> <Whitespace> ">"
   Parser<String> generics() => [
@@ -73,30 +82,27 @@ class SimpleWidgetAnnotationGrammer
       ].toSequenceParser().flatten();
 
   /// <TypeList> ::= <Identifier> <Whitespace> "," <Whitespace> <TypeList> | <Identifier>
-  Parser<String> typeList() =>
-      (ref0(whitespace) & ref0(identifier) & ref0(whitespace))
-          .plusSeparated(char(','))
-          .flatten();
+  Parser<String> typeList() => [
+        ref0(space),
+        ref0(identifier),
+        ref0(space),
+      ].toSequenceParser().plusSeparated(char(',')).flatten();
 
   /// <ParameterList> ::= <Parameter> <Whitespace> "," <Whitespace> <ParameterList> | <Parameter>
   Parser<List<SimpleWidgetToken>> parameterList() => [
-        ref0(parameter),
-        [
-          char(',').withWhitespace(),
-          ref0(parameter),
-        ].toSequenceParser().pick(1).star(),
-      ].toSequenceParser().map(
-            (value) => [
-              value[0] as SimpleWidgetToken,
-              ...value[1] as List<SimpleWidgetToken>,
-            ],
-          );
+        ref0(parameter).starSeparated(char(',')).map((value) => value.elements),
+        char(',').spaced().optional(),
+      ].toSequenceParser().pick(0).castList<SimpleWidgetToken>();
+
+  Parser<SimpleWidgetToken> value() => [
+        ref0(expression),
+        ref0(token),
+      ].toChoiceParser().cast();
 
   /// <Parameter> ::= <NamedParam> | <Token> | <Expression>
   Parser<SimpleWidgetToken> parameter() => [
         ref0(namedParameter),
-        ref0(token),
-        ref0(expression),
+        ref0(value),
       ].toChoiceParser().cast();
 
   /// <NamedParameter> ::= <Identifier> <Whitespace> ":" <Whitespace> <Parameter>
@@ -104,28 +110,31 @@ class SimpleWidgetAnnotationGrammer
         [
           ref0(identifier),
           // optional, so we can also parse typed parameters
-          char(':').withWhitespace().optional(),
+          char(':').spaced().optional(),
         ].toSequenceParser().flatten(),
         [
-          ref0(token),
-          ref0(expression),
+          ref0(value),
         ].toChoiceParser(),
-      ]
-          .toSequenceParser()
-          .map(
+      ].toSequenceParser().map(
             (value) => SimpleWidgetElement(value[0], value[1]),
-          )
-          .cast();
+          );
+
+  Parser<SimpleWidgetToken> expression() => [
+        ref0(identifierChain).map(SimpleWidgetLiteral.new),
+        ref0(stringLiteral),
+        ref0(ternary),
+        // ref0(anonymousFunction),
+      ].toChoiceParser().cast();
 
   Parser<SimpleWidgetTernary> ternary() => [
         ref0(expression),
         [
-          char('?').withWhitespace(),
-          ref0(expression),
+          char('?').spaced(),
+          ref0(value),
         ].toSequenceParser().pick(1),
         [
-          char(':').withWhitespace(),
-          ref0(expression),
+          char(':').spaced(),
+          ref0(value),
         ].toSequenceParser().pick(1),
       ].toSequenceParser().map(
             (value) => SimpleWidgetTernary(
@@ -137,12 +146,12 @@ class SimpleWidgetAnnotationGrammer
 
   Parser<SimpleWidgetElement> anonymousFunction() => [
         [
-          char('(').withWhitespace(),
+          char('(').spaced(),
           ref0(parameterList),
-          char(')').withWhitespace(),
-          char('=>').withWhitespace(),
+          char(')').spaced(),
+          string('=>').spaced(),
         ].toSequenceParser().flatten(),
-        ref0(tokenChain),
+        ref0(value),
       ].toSequenceParser().map(
             (value) => SimpleWidgetElement(
               value[0] as String,
@@ -152,14 +161,14 @@ class SimpleWidgetAnnotationGrammer
 
   Parser<SimpleWidgetToken> array() => [
         [
-          char('[').withWhitespace(),
-          ref0(expression),
+          char('[').spaced(),
+          ref0(value),
         ].toSequenceParser().pick(1),
         [
-          char(',').withWhitespace(),
-          ref0(expression),
+          char(',').spaced(),
+          ref0(value),
         ].toSequenceParser().pick(1).star(),
-        char(']').withWhitespace(),
+        char(']').spaced(),
       ].toSequenceParser().map(
             (value) => SimpleWidgetChildren([
               value[0] as SimpleWidgetToken,
@@ -173,25 +182,21 @@ class SimpleWidgetAnnotationGrammer
       ].toChoiceParser().flatten().map((value) => SimpleWidgetLiteral(value));
 
   /// <IdentifierChain> ::= <Identifier> <Whitespace> "." <Whitespace> <IdentifierChain> | <Identifier>
-  Parser<String> identifierChain() => [
-        ref0(identifier),
-        [
-          char('.').withWhitespace(),
-          ref0(identifierChain),
-        ].toSequenceParser().star(),
-      ].toSequenceParser().flatten();
+  Parser<String> identifierChain() =>
+      ref0(identifier).plusSeparated(char('.')).flatten();
 
   /// <Identifier> ::= <AlphaNumChar>+
-  Parser<String> identifier() => ref0(alphaNumeric).plus().flatten();
-
-  /// <AlphaNumChar> ::= [a-z] | [A-Z] | [0-9]
-  Parser<String> alphaNumeric() => (letter() | digit()).plus().flatten();
+  Parser<String> identifier() => (letter() | digit()).plus().flatten();
 }
 
+typedef TokenHead = (String, List<SimpleWidgetToken>?);
+
+Parser<dynamic> space() => [whitespace(), newline()].toChoiceParser().star();
+
 extension Whitespaced on Parser {
-  Parser<dynamic> withWhitespace() => <Parser>[
-        [whitespace(), newline()].toChoiceParser().star(),
+  Parser<dynamic> spaced() => <Parser>[
+        ref0(space),
         this,
-        [whitespace(), newline()].toChoiceParser().star(),
+        ref0(space),
       ].toSequenceParser();
 }

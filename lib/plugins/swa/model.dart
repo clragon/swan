@@ -6,7 +6,7 @@ class SimpleWidgetChildren extends SimpleWidgetToken {
   final List<SimpleWidgetToken> value;
 
   @override
-  String toString() => '[${value.join(', ')}]';
+  String toString() => '[${value.join(', ')}${value.isNotEmpty ? ',' : ''}]';
 }
 
 class SimpleWidgetLiteral extends SimpleWidgetToken {

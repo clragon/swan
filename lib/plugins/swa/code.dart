@@ -26,10 +26,7 @@ class SimpleWidgetCode extends SimpleWidgetAnnotation {
         buffer.write('child: ');
       }
       buffer.write(child);
-      buffer.write(', ');
-      if (multiple) {
-        buffer.write('],');
-      }
+      buffer.write(',');
     }
     buffer.write(')');
     return buffer.toString();
