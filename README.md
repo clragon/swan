@@ -50,6 +50,11 @@ A maximum of 5 sources of SWA code will be processed per message.
 
 To see the help message, send a message with just `.swa` in it.
 
+The SWA parser is based on an EBNF grammar.
+
+The full grammar is available [here](/lib/plugins/swa/grammar.ebnf).  
+You can test it on [this website](https://bnfplayground.pauliankline.com/).
+
 ### Skull emoji
 
 Delete the bot's response with a skull emoji.

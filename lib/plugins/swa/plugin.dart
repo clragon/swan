@@ -170,8 +170,7 @@ class CompileSwa extends BotPlugin {
       logger.warning('Failed to parse message:\n$link');
     } else {
       logger.info('Successfully parsed message:\n$link');
-      SimpleWidgetAnnotation annotation =
-          result.value as SimpleWidgetAnnotation;
+      SimpleWidgetToken annotation = result.value as SimpleWidgetAnnotation;
       annotation = annotation.toCode();
       String output = annotation.toString();
       output = 'final output = $output;';

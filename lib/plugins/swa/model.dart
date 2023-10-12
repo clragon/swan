@@ -1,5 +1,14 @@
 sealed class SimpleWidgetToken {}
 
+class SimpleWidgetChildren extends SimpleWidgetToken {
+  SimpleWidgetChildren(this.value);
+
+  final List<SimpleWidgetToken> value;
+
+  @override
+  String toString() => '[${value.join(', ')}]';
+}
+
 class SimpleWidgetLiteral extends SimpleWidgetToken {
   SimpleWidgetLiteral(this.value);
 
@@ -9,25 +18,37 @@ class SimpleWidgetLiteral extends SimpleWidgetToken {
   String toString() => value;
 }
 
-class SimpleWidgetKey extends SimpleWidgetToken {
-  SimpleWidgetKey(this.value);
+class SimpleWidgetElement extends SimpleWidgetToken {
+  SimpleWidgetElement(this.name, this.child);
 
-  final String? value;
+  final String? name;
+  final SimpleWidgetToken child;
 
   @override
-  String toString() => value ?? '';
+  String toString() => '${name ?? ''} $child';
+}
+
+class SimpleWidgetTernary extends SimpleWidgetToken {
+  SimpleWidgetTernary(this.condition, this.then, this.otherwise);
+
+  final SimpleWidgetToken condition;
+  final SimpleWidgetToken then;
+  final SimpleWidgetToken otherwise;
+
+  @override
+  String toString() => '$condition ? $then : $otherwise';
 }
 
 class SimpleWidgetAnnotation extends SimpleWidgetToken {
   SimpleWidgetAnnotation({
     required this.name,
     this.parameters,
-    this.children,
+    this.child,
   });
 
   final String name;
-  final Map<SimpleWidgetKey, SimpleWidgetToken>? parameters;
-  final List<SimpleWidgetAnnotation>? children;
+  final List<SimpleWidgetToken>? parameters;
+  final SimpleWidgetToken? child;
 
   @override
   String toString() {
@@ -35,25 +56,12 @@ class SimpleWidgetAnnotation extends SimpleWidgetToken {
     buffer.write(name);
     if (parameters != null) {
       buffer.write('(');
-      buffer.write(
-        parameters!.entries
-            .map((e) => '${e.key.value != null ? '${e.key.value}: ' : ''}'
-                '${e.value}')
-            .join(', '),
-      );
+      buffer.write(parameters!.join(', '));
       buffer.write(')');
     }
-    if (children != null) {
-      bool multiple = children!.length > 1;
-      if (multiple) {
-        buffer.write(' > [ ');
-      } else {
-        buffer.write(' > ');
-      }
-      buffer.write(children!.join(', '));
-      if (multiple) {
-        buffer.write(' ]');
-      }
+    if (child != null) {
+      buffer.write(' > ');
+      buffer.write(child);
     }
     return buffer.toString();
   }

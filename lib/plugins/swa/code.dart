@@ -4,7 +4,7 @@ class SimpleWidgetCode extends SimpleWidgetAnnotation {
   SimpleWidgetCode({
     required super.name,
     super.parameters,
-    super.children,
+    super.child,
   });
 
   @override
@@ -13,24 +13,19 @@ class SimpleWidgetCode extends SimpleWidgetAnnotation {
     buffer.write(name);
     buffer.write('(');
     if (parameters != null) {
-      buffer.write(
-        parameters!.entries
-            .map((e) => '${e.key.value != null ? '${e.key.value}: ' : ''}'
-                '${e.value}')
-            .join(', '),
-      );
+      buffer.write(parameters!.map((e) => e.toString()).join(', '));
     }
-    if (children != null) {
+    if (child != null) {
       if (parameters != null) {
         buffer.write(', ');
       }
-      bool multiple = children!.length > 1;
+      bool multiple = child is SimpleWidgetChildren;
       if (multiple) {
-        buffer.write('children: [');
+        buffer.write('children: ');
       } else {
         buffer.write('child: ');
       }
-      buffer.write(children!.join(', '));
+      buffer.write(child);
       buffer.write(', ');
       if (multiple) {
         buffer.write('],');
@@ -41,10 +36,21 @@ class SimpleWidgetCode extends SimpleWidgetAnnotation {
   }
 }
 
-extension SimpleWidgetCodeConversion on SimpleWidgetAnnotation {
-  SimpleWidgetCode toCode() => SimpleWidgetCode(
-        name: name,
-        parameters: parameters,
-        children: children?.map((e) => e.toCode()).toList(),
-      );
+extension SimpleWidgetCodeConversion on SimpleWidgetToken {
+  SimpleWidgetToken toCode() => switch (this) {
+        SimpleWidgetAnnotation a => SimpleWidgetCode(
+            name: a.name,
+            parameters: a.parameters?.map((e) => e.toCode()).toList(),
+            child: a.child?.toCode(),
+          ),
+        SimpleWidgetChildren c =>
+          SimpleWidgetChildren(c.value.map((e) => e.toCode()).toList()),
+        SimpleWidgetElement e => SimpleWidgetElement(e.name, e.child.toCode()),
+        SimpleWidgetTernary t => SimpleWidgetTernary(
+            t.condition.toCode(),
+            t.then.toCode(),
+            t.otherwise.toCode(),
+          ),
+        _ => this
+      };
 }

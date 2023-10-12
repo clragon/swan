@@ -1,0 +1,68 @@
+/* The root rule for parsing a Simple Widget Annotation (SWA) */
+<SWA> ::= <Whitespace> <TokenChain> <Whitespace>
+
+/* A chain of tokens, connected through '>' or '>[]' or '[]' */
+<TokenChain> ::= <Token> <Whitespace> ">" <Whitespace> <TokenChain> 
+               | <Token> (<Whitespace> | <Whitespace> ">" <Whitespace>) "[" <Whitespace> <TokenList> <Whitespace> "]" <Whitespace> 
+               | <Token>
+
+/* A list of tokens separated by ',' */
+<TokenList> ::= <TokenChain> <Whitespace> "," <Whitespace> <TokenList> 
+              | <TokenChain>
+
+/* The main token rule, either a widget with/without parameters */
+<Token> ::= <FunctionCall> | <Identifier>
+
+/* Dart-related rules for more flexible expressions */
+<Expression> ::= <DartStringLiteral>
+               | <FunctionCall>
+               | <Ternary>
+               | <AnonymousFunc>
+               | <ArrayLiteral>
+               | <TokenChain>
+
+/* Function Calls */
+<FunctionCall> ::= <Identifier> <Whitespace> <Generics>? <Whitespace> "(" <Whitespace> <ParameterList>? <Whitespace> ")"
+
+/* Generics Expression */
+<Generics> ::= "<" <Whitespace> <TypeList> <Whitespace> ">"
+
+/* TypeList in Generics */
+<TypeList> ::= <Identifier> <Whitespace> "," <Whitespace> <TypeList> 
+             | <Identifier>
+
+/* A list of parameters, includes named parameters */
+<ParameterList> ::= <Parameter> <Whitespace> "," <Whitespace> <ParameterList> 
+              | <Parameter>
+
+/* A single parameter can be a Dart expression, a nested parameter, a body expression, or a named parameter */
+<Parameter> ::= <NamedParameter> | <Token> | <Expression>
+
+/* Named parameters */
+<NamedParameter> ::= <Identifier> <Whitespace> ":" <Whitespace> <Parameter>
+
+/* Conditional Expression */
+<Ternary> ::= <Expression> <Whitespace> "?" <Whitespace> <Token> <Whitespace> ":" <Whitespace> <Token>
+
+/* Anonymous Functions */
+<AnonymousFunc> ::= "(" <Whitespace> <ParameterList>? <Whitespace> ")" <Whitespace> "=>" <Whitespace> <Token>
+
+/* Array Literal */
+<ArrayLiteral> ::= "[" <Whitespace> <ArrayLiteralList>? <Whitespace> "]"
+
+/* Array Literal List */
+<ArrayLiteralList> ::= <Expression> <Whitespace> "," <Whitespace> <ArrayLiteralList>
+                      | <Expression>
+
+/* Dart String literals */
+<DartDoubleQuoteStringLiteralContent> ::= <AlphaNumChar> | "'" | " "
+<DartSingleQuoteStringLiteralContent> ::= <AlphaNumChar> | "\"" | " "
+<DartStringLiteral> ::= "\"" <DartDoubleQuoteStringLiteralContent>* "\"" | "'" <DartSingleQuoteStringLiteralContent>* "'"
+
+/* Dart-related character classifications */
+<IdentifierChain> ::= <Identifier> <Whitespace> "." <Whitespace> <IdentifierChain> | <Identifier>
+<Identifier> ::= <AlphaNumChar>+
+
+/* Character classifications */
+<AlphaNumChar> ::= [a-z] | [A-Z] | [0-9]
+<Whitespace> ::= (" " | "\n")*
