@@ -3,7 +3,6 @@ import 'package:swan/plugins/swa/model.dart';
 
 class SimpleWidgetAnnotationGrammer
     extends GrammarDefinition<SimpleWidgetAnnotation> {
-  /// <SWA> ::= <Whitespace> <TokenChain> <Whitespace>
   @override
   Parser<SimpleWidgetAnnotation> start() => (
         ref0(token).spaced().map((e) => e.$2),
@@ -53,7 +52,6 @@ class SimpleWidgetAnnotationGrammer
             ]),
           );
 
-  /// <FunctionCall> ::= <Identifier> <Whitespace> <Generics>? <Whitespace> "(" <Whitespace> <ParameterList>? <Whitespace> ")"
   Parser<TokenHead> functionCall() {
     return (
       (
@@ -69,18 +67,15 @@ class SimpleWidgetAnnotationGrammer
     ).toSequenceParser();
   }
 
-  /// <Generics> ::= "<" <Whitespace> <TypeList> <Whitespace> ">"
   Parser<String> generics() => (
         char('<'),
         ref0(typeList),
         char('>'),
       ).toSequenceParser().flatten();
 
-  /// <TypeList> ::= <Identifier> <Whitespace> "," <Whitespace> <TypeList> | <Identifier>
   Parser<String> typeList() =>
       ref0(identifier).spaced().plusSeparated(char(',')).flatten();
 
-  /// <ParameterList> ::= <Parameter> <Whitespace> "," <Whitespace> <ParameterList> | <Parameter>
   Parser<List<SimpleWidgetToken>> parameterList() => (
         ref0(parameter).starSeparated(char(',')).map((value) => value.elements),
         char(',').spaced().optional(),
@@ -91,13 +86,11 @@ class SimpleWidgetAnnotationGrammer
         ref0(token),
       ].toChoiceParser();
 
-  /// <Parameter> ::= <NamedParam> | <Token> | <Expression>
   Parser<SimpleWidgetToken> parameter() => [
         ref0(namedParameter),
         ref0(value),
       ].toChoiceParser();
 
-  /// <NamedParameter> ::= <Identifier> <Whitespace> ":" <Whitespace> <Parameter>
   Parser<SimpleWidgetToken> namedParameter() => (
         (
           ref0(identifier),
@@ -163,11 +156,9 @@ class SimpleWidgetAnnotationGrammer
         (char("'") & any().starLazy(char("'")) & char("'")).pick(1),
       ].toChoiceParser().flatten().map(SimpleWidgetLiteral.new);
 
-  /// <IdentifierChain> ::= <Identifier> <Whitespace> "." <Whitespace> <IdentifierChain> | <Identifier>
   Parser<String> identifierChain() =>
       ref0(identifier).plusSeparated(char('.')).flatten();
 
-  /// <Identifier> ::= <AlphaNumChar>+
   Parser<String> identifier() => (letter() | digit()).plus().flatten();
 }
 
