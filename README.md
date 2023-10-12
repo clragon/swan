@@ -50,7 +50,14 @@ A maximum of 5 sources of SWA code will be processed per message.
 
 To see the help message, send a message with just `.swa` in it.
 
-To delete the bot's response, react to it with the 💀 emoji.
+### Skull emoji
+
+Delete the bot's response with a skull emoji.
+
+#### Usage
+
+React to a bot response with the 💀 emoji to delete it.
+This only works if you are the author of the message that triggered the bot.
 
 ### StackOverflow Mirror
 
