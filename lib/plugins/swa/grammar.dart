@@ -6,11 +6,7 @@ class SimpleWidgetAnnotationGrammer
   /// <SWA> ::= <Whitespace> <TokenChain> <Whitespace>
   @override
   Parser<SimpleWidgetAnnotation> start() => (
-        (
-          ref0(space),
-          ref0(token),
-          ref0(space),
-        ).toSequenceParser().map((e) => e.$2),
+        ref0(token).spaced().map((e) => e.$2),
         endOfInput()
       ).toSequenceParser().map((e) => e.$1);
 
@@ -81,11 +77,8 @@ class SimpleWidgetAnnotationGrammer
       ).toSequenceParser().flatten();
 
   /// <TypeList> ::= <Identifier> <Whitespace> "," <Whitespace> <TypeList> | <Identifier>
-  Parser<String> typeList() => (
-        ref0(space),
-        ref0(identifier),
-        ref0(space),
-      ).toSequenceParser().plusSeparated(char(',')).flatten();
+  Parser<String> typeList() =>
+      ref0(identifier).spaced().plusSeparated(char(',')).flatten();
 
   /// <ParameterList> ::= <Parameter> <Whitespace> "," <Whitespace> <ParameterList> | <Parameter>
   Parser<List<SimpleWidgetToken>> parameterList() => (
