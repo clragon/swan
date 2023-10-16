@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:nyxx/nyxx.dart';
-import 'package:swan/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 import 'package:swan/plugins/env/plugin.dart';
 import 'package:swan/plugins/stackoverflow/client.dart';
@@ -57,13 +56,9 @@ class StackOverflowMirror extends BotPlugin {
             try {
               StackOverflowPost post =
                   await stackOverflowClient.getPost(postId: id);
-              String result = postToDiscordMarkdown(post);
-              if (result.length > kMaxMessageLength) {
-                result = '${result.substring(0, kMaxMessageLength - 3)}...';
-              }
               await event.message.channel.sendMessage(
                 MessageBuilder(
-                  content: result,
+                  content: await postToDiscordMarkdown(post, client.env),
                   replyId: event.message.id,
                   allowedMentions: AllowedMentions(repliedUser: false),
                 ),
