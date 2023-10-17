@@ -100,7 +100,7 @@ Future<String> shortenWithPastebin(
 [[Long content cut. See full file here]](<$paste>).
 ```dart
 ${block.$3.split('\n').take(3).join('\n')}
-...
+// ...
 ```
 ''');
 
