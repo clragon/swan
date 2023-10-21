@@ -103,7 +103,7 @@ Future<String> shortenWithPastebin(
     }
 
     content = content.replaceRange(block.$1, block.$1 + block.$2, '''
-[[Long content cut. See full file here]](<$paste>).
+[[see full code]](<$paste>).
 ```dart
 $cutPreview
 // ...
