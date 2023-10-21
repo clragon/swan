@@ -96,7 +96,7 @@ Future<String> shortenWithPastebin(
 
     final oldLength = content.length;
 
-    String cutPreview = block.$3.split('\n').take(3).join('\n');
+    String cutPreview = block.$3.trim().split('\n').take(3).join('\n');
     if (cutPreview.length > 200) {
       // Ellipsis is already included in the template
       cutPreview = cutPreview.substring(0, 200);
@@ -105,7 +105,7 @@ Future<String> shortenWithPastebin(
     content = content.replaceRange(block.$1, block.$1 + block.$2, '''
 [[see full code]](<$paste>).
 ```dart
-$cutPreview
+${cutPreview.trim()}
 // ...
 ```
 ''');
