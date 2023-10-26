@@ -1,5 +1,4 @@
 import 'package:nyxx/nyxx.dart';
-import 'package:swan/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 
 class DeleteByReaction extends BotPlugin {
@@ -22,7 +21,7 @@ class DeleteByReaction extends BotPlugin {
       if (owner != event.userId) return;
       if (event.emoji.name != '💀') return;
       await message.delete();
-      logger.info('Deleted message 💀:\n${messageLink(message)}');
+      logger.info('Deleted message 💀:\n${message.id}');
     });
   }
 }
