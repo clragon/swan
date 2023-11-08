@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:nyxx/nyxx.dart';
 import 'package:petitparser/petitparser.dart';
+import 'package:swan/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 import 'package:swan/plugins/dartdoc/dartdoc_entry.dart';
 import 'package:swan/plugins/dartdoc/search_grammar.dart';
@@ -178,7 +179,7 @@ class DartdocSearch extends BotPlugin {
                 ),
               ],
             ));
-            return;
+            break;
           }
 
           final package = matchingPackages.first;
@@ -243,7 +244,7 @@ class DartdocSearch extends BotPlugin {
                 ),
               ],
             ));
-            return;
+            break;
           }
 
           if (search.kind == SearchKind.elementLookup) {
@@ -290,7 +291,7 @@ class DartdocSearch extends BotPlugin {
                 ),
               ],
             ));
-            return;
+            break;
           }
 
           if (search.kind == SearchKind.packageLookup) {
@@ -319,6 +320,8 @@ class DartdocSearch extends BotPlugin {
             ));
           }
       }
+
+      logger.info('Sent search result: ${messageLink(event)}');
     }
 
     client.onMessageCreate.listen((event) async {
