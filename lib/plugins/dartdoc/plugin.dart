@@ -86,13 +86,12 @@ class DartdocSearch extends BotPlugin {
   bool isEnabled(NyxxGateway client) => !(client.env.disableDartdocs ?? false);
 
   @override
-  String buildHelpText(NyxxGateway client) => r'''
-Search Flutter & pub.dev package API documentation
-- `![Name]` or `![package/Name]`: Return the documentation for `Name` in Flutter's or `package`'s API documentation
-- `?[Name]` or `?[package/Name]`: Search for `Name` in Flutter's or `package`'s API documentation
-- `$[name]`: Return the pub.dev page for the package `name`
-- `&[name]`: Search pub.dev for `name`
-      ''';
+  String buildHelpText(NyxxGateway client) =>
+      'Search Flutter & pub.dev package API documentation\n'
+      "- `![Name]` or `![package/Name]`: Return the documentation for `Name` in Flutter's or `package`'s API documentation\n"
+      "- `?[Name]` or `?[package/Name]`: Search for `Name` in Flutter's or `package`'s API documentation\n"
+      '- `\$[name]`: Return the pub.dev page for the package `name`\n'
+      '- `&[name]`: Search pub.dev for `name`\n';
 
   Future<(String, List<DartdocEntry>)> getEntries(String package) async {
     final cached = documentationCache[package];
