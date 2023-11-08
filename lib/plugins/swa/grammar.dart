@@ -1,6 +1,7 @@
 import 'package:petitparser/petitparser.dart';
 import 'package:swan/plugins/swa/model.dart';
 
+// TODO: update grammar file to reflect parser changes
 class SimpleWidgetAnnotationGrammer
     extends GrammarDefinition<SimpleWidgetAnnotation> {
   @override
@@ -97,22 +98,25 @@ class SimpleWidgetAnnotationGrammer
           // optional, so we can also parse typed parameters
           char(':').spaced().optional(),
         ).toSequenceParser().flatten(),
-        [
-          ref0(value),
-        ].toChoiceParser(),
+        ref0(value),
       ).toSequenceParser().map(
             (value) => SimpleWidgetElement(value.$1, value.$2),
           );
 
   Parser<SimpleWidgetToken> expression() => [
+        ref0(valueExpression),
+        ref0(ternary),
+        ref0(anonymousFunction),
+      ].toChoiceParser().cast();
+
+  Parser<SimpleWidgetToken> valueExpression() => [
         ref0(identifierChain).map(SimpleWidgetLiteral.new),
         ref0(stringLiteral),
-        ref0(ternary),
-        // ref0(anonymousFunction),
+        ref0(array),
       ].toChoiceParser().cast();
 
   Parser<SimpleWidgetTernary> ternary() => (
-        ref0(expression),
+        ref0(valueExpression),
         (
           char('?').spaced(),
           ref0(value),
@@ -138,17 +142,13 @@ class SimpleWidgetAnnotationGrammer
           );
 
   Parser<SimpleWidgetToken> array() => (
-        (
-          char('[').spaced(),
-          ref0(value),
-        ).toSequenceParser().map((e) => e.$2),
-        (
-          char(',').spaced(),
-          ref0(value),
-        ).toSequenceParser().map((e) => e.$2).star(),
+        char('[').spaced(),
+        ref0(value).spaced().starSeparated(char(',')).map(
+              (value) => value.elements.map((e) => e.$2).toList(),
+            ),
         char(']').spaced(),
       ).toSequenceParser().map(
-            (value) => SimpleWidgetChildren([value.$1, ...value.$2]),
+            (value) => SimpleWidgetChildren(value.$2),
           );
 
   Parser<SimpleWidgetLiteral> stringLiteral() => [

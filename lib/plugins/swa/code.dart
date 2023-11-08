@@ -12,21 +12,27 @@ class SimpleWidgetCode extends SimpleWidgetAnnotation {
     final buffer = StringBuffer();
     buffer.write(name);
     buffer.write('(');
-    if (parameters != null) {
-      buffer.write(parameters!.map((e) => e.toString()).join(', '));
-    }
+    List<SimpleWidgetToken>? parameters = this.parameters;
     if (child != null) {
-      if (parameters != null) {
-        buffer.write(', ');
-      }
+      parameters ??= [];
       bool multiple = child is SimpleWidgetChildren;
+      SimpleWidgetElement element;
       if (multiple) {
-        buffer.write('children: ');
+        element = SimpleWidgetElement(
+          'children:',
+          child!,
+        );
       } else {
-        buffer.write('child: ');
+        element = SimpleWidgetElement(
+          'child:',
+          child!,
+        );
       }
-      buffer.write(child);
-      buffer.write(',');
+      parameters.add(element);
+    }
+    if (parameters != null) {
+      buffer.write(parameters.map((e) => e.toString()).join(', '));
+      buffer.write(', ');
     }
     buffer.write(')');
     return buffer.toString();
