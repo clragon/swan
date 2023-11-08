@@ -203,19 +203,30 @@ class DartdocSearch extends BotPlugin {
                 (e) => (
                   lehvenstein(
                     query,
-                    byName ? e.name : e.qualifiedName,
+                    (byName ? e.name : e.qualifiedName).toLowerCase(),
                   ),
                   e,
                 ),
               ));
 
-              results.sort((a, b) => a.$1.compareTo(b.$1));
+              double getWeight(String type) => switch (type) {
+                    // Make classes more likely to appear than constructors or
+                    // libraries with the same name.
+                    'class_' => 1.1,
+                    _ => 1,
+                  };
+
+              // +1 so that exact matches (distance of 0) still get weighted.
+              results.sort(
+                (a, b) => ((a.$1 + 1) / getWeight(a.$2.type))
+                    .compareTo((b.$1 + 1) / getWeight(b.$2.type)),
+              );
               return List.of(results.map((e) => e.$2));
             });
           }
 
           final results = await process(
-            query,
+            query.toLowerCase(),
             entries,
             byName: byName,
           );
