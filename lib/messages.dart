@@ -6,7 +6,7 @@ const kMaxMessageLength = 2000;
 String errorMessage(Object? exception, StackTrace? stackTrace) {
   return 'Something went wrong :(\n'
       'Please contact an administator. '
-      'Your error id is: `#${exception.hashCode}`';
+      'Your error id is: `#${Object().hashCode.toRadixString(16)}`';
 }
 
 /// Builds the message link for an event.
