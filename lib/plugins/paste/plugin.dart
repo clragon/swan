@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:mime/mime.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:swan/plugins/base/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
@@ -71,9 +69,9 @@ class PasteFiles extends BotPlugin {
           return;
         }
         Uint8List bytes = await attachment.fetch();
-        String? type = lookupMimeType(attachment.fileName, headerBytes: bytes);
-        // TODO: this is unreliable, e.g. pubspec.yaml is not text.
-        if (type == null || !type.startsWith('text/')) {
+        try {
+          files[attachment.fileName] = utf8.decode(bytes);
+        } on FormatException {
           await event.message.channel.sendMessage(
             MessageBuilder(
               content:
@@ -84,8 +82,6 @@ class PasteFiles extends BotPlugin {
           );
           return;
         }
-        String content = utf8.decode(bytes);
-        files[attachment.fileName] = content;
       }
 
       Map<String, String> links = {};

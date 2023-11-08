@@ -16,7 +16,6 @@ dependencies:
   json_annotation: ^4.8.1
   logging: ^1.2.0
   meta: ^1.9.1
-  mime: ^1.0.4
   nyxx: ^6.0.0
   petitparser: ^6.0.1
   recase: ^4.1.0

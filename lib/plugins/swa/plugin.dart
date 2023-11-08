@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
-
 import 'package:dart_style/dart_style.dart';
-import 'package:mime/mime.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:swan/plugins/base/messages.dart';
@@ -91,8 +89,9 @@ class CompileSwa extends BotPlugin {
           return;
         }
         Uint8List bytes = await attachment.fetch();
-        String? type = lookupMimeType(attachment.fileName, headerBytes: bytes);
-        if (type == null || !type.startsWith('text/')) {
+        try {
+          sources.add(utf8.decode(bytes));
+        } on FormatException {
           await event.message.channel.sendMessage(
             MessageBuilder(
               content:
@@ -101,9 +100,8 @@ class CompileSwa extends BotPlugin {
               allowedMentions: AllowedMentions(repliedUser: false),
             ),
           );
+          return;
         }
-        String content = utf8.decode(bytes);
-        sources.add(content);
       }
 
       sources = sources.toSet().toList();
