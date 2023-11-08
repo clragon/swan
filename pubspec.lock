@@ -357,10 +357,10 @@ packages:
     dependency: "direct main"
     description:
       name: nyxx
-      sha256: c11ac9c36618a5096a9bd35da3aeb7eb4a5a214d88e92e9bd1015293ce1187d8
+      sha256: "01fd7eeb8f5888d50a64e45df0423c46ab872b518bec486b2d72580bd986f420"
       url: "https://pub.dev"
     source: hosted
-    version: "6.0.0-dev.3"
+    version: "6.0.0"
   oauth2:
     dependency: transitive
     description:

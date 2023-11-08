@@ -10,18 +10,16 @@ String errorMessage(Object? exception, StackTrace? stackTrace) {
 }
 
 /// Builds the message link for an event.
-String messageLink(Message message) {
-  String guildId = '@me';
-  if (message.channel is GuildTextChannel) {
-    guildId = (message.channel as GuildTextChannel).guildId.toString();
-  }
+String messageLink(MessageCreateEvent event) {
+  final message = event.message;
+
   return 'https://discord.com/channels/'
-      '$guildId/'
+      '${event.guildId ?? '@me'}/'
       '${message.channel.id}/'
       '${message.id}';
 }
 
 extension EventMessageLink on MessageCreateEvent {
   /// Builds the message link for an event.
-  String get link => messageLink(message);
+  String get link => messageLink(this);
 }
