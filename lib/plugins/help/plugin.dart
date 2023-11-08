@@ -1,6 +1,6 @@
 import 'package:nyxx/nyxx.dart';
 import 'package:recase/recase.dart';
-import 'package:swan/messages.dart';
+import 'package:swan/plugins/base/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 import 'package:swan/plugins/env/plugin.dart';
 

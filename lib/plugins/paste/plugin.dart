@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:mime/mime.dart';
 import 'package:nyxx/nyxx.dart';
-import 'package:swan/messages.dart';
+import 'package:swan/plugins/base/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 import 'package:swan/plugins/env/plugin.dart';
 import 'package:swan/plugins/paste/client.dart';

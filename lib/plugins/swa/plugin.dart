@@ -7,7 +7,7 @@ import 'package:dart_style/dart_style.dart';
 import 'package:mime/mime.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:swan/messages.dart';
+import 'package:swan/plugins/base/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 import 'package:swan/plugins/env/plugin.dart';
 import 'package:swan/plugins/swa/code.dart';

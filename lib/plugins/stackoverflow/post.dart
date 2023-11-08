@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:swan/messages.dart';
+import 'package:swan/plugins/base/messages.dart';
 import 'package:swan/plugins/env/plugin.dart';
 import 'package:swan/plugins/paste/client.dart';
 import 'package:timeago/timeago.dart' as timeago;

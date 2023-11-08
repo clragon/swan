@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:nyxx/nyxx.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:swan/messages.dart';
+import 'package:swan/plugins/base/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 import 'package:swan/plugins/dartdoc/dartdoc_entry.dart';
 import 'package:swan/plugins/dartdoc/search_grammar.dart';
