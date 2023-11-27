@@ -1,4 +1,5 @@
 import 'package:nyxx/nyxx.dart';
+import 'package:swan/plugins/anti_spam/plugin.dart';
 import 'package:swan/plugins/dartdoc/plugin.dart';
 import 'package:swan/plugins/env/plugin.dart';
 import 'package:swan/plugins/help/plugin.dart';
@@ -26,6 +27,7 @@ Future<void> main() async {
         StackOverflowMirror(),
         PasteFiles(),
         DartdocSearch(),
+        AntiSpam(),
       ],
     ),
   );
