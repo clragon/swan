@@ -96,7 +96,7 @@ class AntiSpam extends BotPlugin {
             await event.guild!.createBan(
               event.message.author.id,
               auditLogReason: 'Excessive spam',
-              deleteMessages: const Duration(days: 7),
+              deleteMessages: const Duration(hours: 1),
             );
 
             logger.info('Banned ${event.message.author.id} ($count reposts)');
