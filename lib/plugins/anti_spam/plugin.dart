@@ -92,13 +92,18 @@ class AntiSpam extends BotPlugin {
 
           logger.info('Warned ${event.message.author.id} ($count reposts)');
         } else {
-          await event.guild!.createBan(
-            event.message.author.id,
-            auditLogReason: 'Excessive spam',
-            deleteMessages: const Duration(days: 7),
-          );
+          try {
+            await event.guild!.createBan(
+              event.message.author.id,
+              auditLogReason: 'Excessive spam',
+              deleteMessages: const Duration(days: 7),
+            );
 
-          logger.info('Banned ${event.message.author.id} ($count reposts)');
+            logger.info('Banned ${event.message.author.id} ($count reposts)');
+          } on HttpResponseError catch (e) {
+            logger.warning(
+                "Couldn't ban ${event.message.author.id} ($count reposts): ${e.message}");
+          }
         }
       }
 
