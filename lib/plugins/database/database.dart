@@ -5,9 +5,7 @@ import 'package:drift/native.dart';
 
 part 'database.g.dart';
 
-final database = SwanDatabase();
-
-@DriftDatabase(tables: [AntiSpamConfig])
+@DriftDatabase(tables: [AntiSpamConfigs])
 class SwanDatabase extends _$SwanDatabase {
   SwanDatabase()
       : super(
@@ -16,9 +14,16 @@ class SwanDatabase extends _$SwanDatabase {
 
   @override
   int get schemaVersion => 1;
+
+  Stream<AntiSpamConfig?> antiSpamConfig(int id) =>
+      (select(antiSpamConfigs)..where((tbl) => tbl.guildId.equals(id)))
+          .watchSingleOrNull();
+
+  Future<void> setAntiSpamConfig(AntiSpamConfigsCompanion config) =>
+      into(antiSpamConfigs).insertOnConflictUpdate(config);
 }
 
-class AntiSpamConfig extends Table {
+class AntiSpamConfigs extends Table {
   @override
   Set<Column> get primaryKey => {guildId};
 

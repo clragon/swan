@@ -3,12 +3,12 @@
 part of 'database.dart';
 
 // ignore_for_file: type=lint
-class $AntiSpamConfigTable extends AntiSpamConfig
-    with TableInfo<$AntiSpamConfigTable, AntiSpamConfigData> {
+class $AntiSpamConfigsTable extends AntiSpamConfigs
+    with TableInfo<$AntiSpamConfigsTable, AntiSpamConfig> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $AntiSpamConfigTable(this.attachedDatabase, [this._alias]);
+  $AntiSpamConfigsTable(this.attachedDatabase, [this._alias]);
   static const VerificationMeta _guildIdMeta =
       const VerificationMeta('guildId');
   @override
@@ -34,9 +34,9 @@ class $AntiSpamConfigTable extends AntiSpamConfig
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
-  static const String $name = 'anti_spam_config';
+  static const String $name = 'anti_spam_configs';
   @override
-  VerificationContext validateIntegrity(Insertable<AntiSpamConfigData> instance,
+  VerificationContext validateIntegrity(Insertable<AntiSpamConfig> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -66,9 +66,9 @@ class $AntiSpamConfigTable extends AntiSpamConfig
   @override
   Set<GeneratedColumn> get $primaryKey => {guildId};
   @override
-  AntiSpamConfigData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  AntiSpamConfig map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return AntiSpamConfigData(
+    return AntiSpamConfig(
       guildId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}guild_id'])!,
       warningChannelId: attachedDatabase.typeMapping.read(
@@ -79,17 +79,16 @@ class $AntiSpamConfigTable extends AntiSpamConfig
   }
 
   @override
-  $AntiSpamConfigTable createAlias(String alias) {
-    return $AntiSpamConfigTable(attachedDatabase, alias);
+  $AntiSpamConfigsTable createAlias(String alias) {
+    return $AntiSpamConfigsTable(attachedDatabase, alias);
   }
 }
 
-class AntiSpamConfigData extends DataClass
-    implements Insertable<AntiSpamConfigData> {
+class AntiSpamConfig extends DataClass implements Insertable<AntiSpamConfig> {
   final int guildId;
   final int warningChannelId;
   final int rulesChannelId;
-  const AntiSpamConfigData(
+  const AntiSpamConfig(
       {required this.guildId,
       required this.warningChannelId,
       required this.rulesChannelId});
@@ -102,18 +101,18 @@ class AntiSpamConfigData extends DataClass
     return map;
   }
 
-  AntiSpamConfigCompanion toCompanion(bool nullToAbsent) {
-    return AntiSpamConfigCompanion(
+  AntiSpamConfigsCompanion toCompanion(bool nullToAbsent) {
+    return AntiSpamConfigsCompanion(
       guildId: Value(guildId),
       warningChannelId: Value(warningChannelId),
       rulesChannelId: Value(rulesChannelId),
     );
   }
 
-  factory AntiSpamConfigData.fromJson(Map<String, dynamic> json,
+  factory AntiSpamConfig.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return AntiSpamConfigData(
+    return AntiSpamConfig(
       guildId: serializer.fromJson<int>(json['guildId']),
       warningChannelId: serializer.fromJson<int>(json['warningChannelId']),
       rulesChannelId: serializer.fromJson<int>(json['rulesChannelId']),
@@ -129,16 +128,16 @@ class AntiSpamConfigData extends DataClass
     };
   }
 
-  AntiSpamConfigData copyWith(
+  AntiSpamConfig copyWith(
           {int? guildId, int? warningChannelId, int? rulesChannelId}) =>
-      AntiSpamConfigData(
+      AntiSpamConfig(
         guildId: guildId ?? this.guildId,
         warningChannelId: warningChannelId ?? this.warningChannelId,
         rulesChannelId: rulesChannelId ?? this.rulesChannelId,
       );
   @override
   String toString() {
-    return (StringBuffer('AntiSpamConfigData(')
+    return (StringBuffer('AntiSpamConfig(')
           ..write('guildId: $guildId, ')
           ..write('warningChannelId: $warningChannelId, ')
           ..write('rulesChannelId: $rulesChannelId')
@@ -151,28 +150,28 @@ class AntiSpamConfigData extends DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is AntiSpamConfigData &&
+      (other is AntiSpamConfig &&
           other.guildId == this.guildId &&
           other.warningChannelId == this.warningChannelId &&
           other.rulesChannelId == this.rulesChannelId);
 }
 
-class AntiSpamConfigCompanion extends UpdateCompanion<AntiSpamConfigData> {
+class AntiSpamConfigsCompanion extends UpdateCompanion<AntiSpamConfig> {
   final Value<int> guildId;
   final Value<int> warningChannelId;
   final Value<int> rulesChannelId;
-  const AntiSpamConfigCompanion({
+  const AntiSpamConfigsCompanion({
     this.guildId = const Value.absent(),
     this.warningChannelId = const Value.absent(),
     this.rulesChannelId = const Value.absent(),
   });
-  AntiSpamConfigCompanion.insert({
+  AntiSpamConfigsCompanion.insert({
     this.guildId = const Value.absent(),
     required int warningChannelId,
     required int rulesChannelId,
   })  : warningChannelId = Value(warningChannelId),
         rulesChannelId = Value(rulesChannelId);
-  static Insertable<AntiSpamConfigData> custom({
+  static Insertable<AntiSpamConfig> custom({
     Expression<int>? guildId,
     Expression<int>? warningChannelId,
     Expression<int>? rulesChannelId,
@@ -184,11 +183,11 @@ class AntiSpamConfigCompanion extends UpdateCompanion<AntiSpamConfigData> {
     });
   }
 
-  AntiSpamConfigCompanion copyWith(
+  AntiSpamConfigsCompanion copyWith(
       {Value<int>? guildId,
       Value<int>? warningChannelId,
       Value<int>? rulesChannelId}) {
-    return AntiSpamConfigCompanion(
+    return AntiSpamConfigsCompanion(
       guildId: guildId ?? this.guildId,
       warningChannelId: warningChannelId ?? this.warningChannelId,
       rulesChannelId: rulesChannelId ?? this.rulesChannelId,
@@ -212,7 +211,7 @@ class AntiSpamConfigCompanion extends UpdateCompanion<AntiSpamConfigData> {
 
   @override
   String toString() {
-    return (StringBuffer('AntiSpamConfigCompanion(')
+    return (StringBuffer('AntiSpamConfigsCompanion(')
           ..write('guildId: $guildId, ')
           ..write('warningChannelId: $warningChannelId, ')
           ..write('rulesChannelId: $rulesChannelId')
@@ -223,10 +222,11 @@ class AntiSpamConfigCompanion extends UpdateCompanion<AntiSpamConfigData> {
 
 abstract class _$SwanDatabase extends GeneratedDatabase {
   _$SwanDatabase(QueryExecutor e) : super(e);
-  late final $AntiSpamConfigTable antiSpamConfig = $AntiSpamConfigTable(this);
+  late final $AntiSpamConfigsTable antiSpamConfigs =
+      $AntiSpamConfigsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [antiSpamConfig];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [antiSpamConfigs];
 }

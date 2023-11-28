@@ -4,7 +4,8 @@ import 'package:drift/drift.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_extensions/nyxx_extensions.dart';
 import 'package:swan/plugins/base/plugin.dart';
-import 'package:swan/plugins/database.dart';
+import 'package:swan/plugins/database/database.dart';
+import 'package:swan/plugins/database/plugin.dart';
 import 'package:swan/plugins/env/plugin.dart';
 
 class AntiSpam extends BotPlugin {
@@ -68,9 +69,8 @@ class AntiSpam extends BotPlugin {
       }
 
       if (count != 0) {
-        final query = database.antiSpamConfig.select()
-          ..where((tbl) => tbl.guildId.equals(event.guild!.id.value));
-        final config = await query.getSingleOrNull();
+        final config =
+            await client.db.antiSpamConfig(event.guild!.id.value).first;
 
         if (config == null) return;
 
@@ -140,8 +140,8 @@ class AntiSpam extends BotPlugin {
       final [warnChannelId, rulesChannelId] =
           rest.split(RegExp(r'\s+')).map(Snowflake.parse).toList();
 
-      await database.antiSpamConfig.insertOnConflictUpdate(
-        AntiSpamConfigCompanion.insert(
+      client.db.setAntiSpamConfig(
+        AntiSpamConfigsCompanion.insert(
           guildId: Value(guild.id.value),
           warningChannelId: warnChannelId.value,
           rulesChannelId: rulesChannelId.value,
