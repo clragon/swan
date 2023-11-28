@@ -33,13 +33,24 @@ class AntiSpam extends BotPlugin {
     client.onGuildCreate.listen((event) async {
       if (event is! GuildCreateEvent) return;
 
-      _messages[event.guild.id] = {
-        for (final channel in event.channels.whereType<TextChannel>())
-          channel.id: Queue.of(
+      Future<Queue<(Snowflake, String)>> fetchInitialCache(
+        TextChannel channel,
+      ) async {
+        try {
+          return Queue.of(
             (await channel.messages.fetchMany(limit: cacheSize)).map(
               (e) => (e.author.id, e.content),
             ),
-          ),
+          );
+        } on HttpResponseError {
+          // Couldn't read messages, bot cannot see channel
+          return Queue();
+        }
+      }
+
+      _messages[event.guild.id] = {
+        for (final channel in event.channels.whereType<TextChannel>())
+          channel.id: await fetchInitialCache(channel),
       };
 
       logger.info('Populated message cache for ${event.guild.id}');
