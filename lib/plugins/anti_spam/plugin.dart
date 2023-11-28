@@ -57,7 +57,21 @@ class AntiSpam extends BotPlugin {
     });
 
     client.onMessageCreate.listen((event) async {
-      if (event.guild == null) return;
+      if (event.message.author case WebhookAuthor() || User(isBot: true)) {
+        return;
+      }
+
+      final guild = await event.guild?.get();
+      final member = await event.member?.get();
+      if (guild == null || member == null) return;
+
+      final permissions = await computePermissions(
+        guild,
+        await event.message.channel.get() as GuildChannel,
+        member,
+      );
+
+      if (permissions.isAdministrator) return;
 
       final checkedContent = await sanitizeContent(
         event.message.content,
