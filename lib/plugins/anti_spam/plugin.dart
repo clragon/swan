@@ -10,7 +10,7 @@ import 'package:swan/plugins/database/plugin.dart';
 import 'package:swan/plugins/env/plugin.dart';
 
 class AntiSpam extends BotPlugin {
-  static const cacheSize = 5;
+  static const cacheSize = 15;
 
   @override
   String get name => 'AntiSpam';
