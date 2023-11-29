@@ -5,3 +5,4 @@
 .vscode
 logs
 build
+database.sqlite3

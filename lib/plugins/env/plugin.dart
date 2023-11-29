@@ -81,7 +81,8 @@ extension EnvironmentPluginAccess on NyxxGateway {
     Environment? env =
         options.plugins.whereType<EnvironmentPlugin>().firstOrNull?.env;
     if (env == null) {
-      throw StateError('Tried to access Environment, but no EnvPlugin found.');
+      throw StateError(
+          'Tried to access Environment, but no EnvironmentPlugin found.');
     }
     return env;
   }
