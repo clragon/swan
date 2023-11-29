@@ -187,12 +187,12 @@ class AntiSpam extends BotPlugin {
 
       logger.info(
           'Updated config for ${guild.id}: warn in $warningChannelId, rules channel $rulesChannelId');
-    } on FormatException catch (e) {
+    } on FormatException {
       await (channel as TextChannel).sendMessage(MessageBuilder(
         replyId: event.message.id,
         content: "Couldn't parse channel IDs.",
       ));
-      logger.warning('Failed to parse config update from ${event.link} ($e)');
+      logger.warning('Failed to parse anti spam config from:\n${event.link}');
     }
   }
 }
