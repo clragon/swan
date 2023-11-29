@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:drift/drift.dart';
 import 'package:nyxx/nyxx.dart';
 import 'package:nyxx_extensions/nyxx_extensions.dart';
+import 'package:swan/plugins/base/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 import 'package:swan/plugins/database/database.dart';
 import 'package:swan/plugins/database/plugin.dart';
@@ -19,7 +20,7 @@ class AntiSpam extends BotPlugin {
       'Moderates spam by warning users if they repeat messages in multiple'
       ' channels, and bans users if they repeat messages too many times.\n\n'
       'Admins can configure the rules and warning channel using '
-      '`${client.env.commandPrefix}warn-in warning-channel-id rules-channel-id`';
+      '`${client.env.commandPrefix}warn-in #warnings #rules`';
 
   final Map<Snowflake, Map<Snowflake, Queue<(Snowflake, String)>>> _messages =
       {};
@@ -140,10 +141,18 @@ class AntiSpam extends BotPlugin {
   }
 
   void _tryUpdateConfig(NyxxGateway client, MessageCreateEvent event) async {
-    if (!event.message.content
-        .startsWith('${client.env.commandPrefix}warn-in ')) {
-      return;
-    }
+    RegExp command = RegExp(
+      r'^'
+      '${client.env.commandPrefix}'
+      r'warn-in\s+'
+      r'<#(?<warnings>\d+)>\s+'
+      r'<#(?<rules>\d+)>\s*'
+      r'$',
+    );
+
+    RegExpMatch? match = command.firstMatch(event.message.content);
+
+    if (match == null) return;
 
     final member = await event.member?.get();
     if (member == null) return;
@@ -158,17 +167,14 @@ class AntiSpam extends BotPlugin {
     if (!permissions.canManageGuild) return;
 
     try {
-      final rest = event.message.content
-          .substring(client.env.commandPrefix.length + 8)
-          .trim();
-
-      final [warnChannelId, rulesChannelId] =
-          rest.split(RegExp(r'\s+')).map(Snowflake.parse).toList();
+      Snowflake warningChannelId =
+          Snowflake.parse(match.namedGroup('warnings')!);
+      Snowflake rulesChannelId = Snowflake.parse(match.namedGroup('rules')!);
 
       client.db.setAntiSpamConfig(
         AntiSpamConfigsCompanion.insert(
           guildId: Value(guild.id.value),
-          warningChannelId: warnChannelId.value,
+          warningChannelId: warningChannelId.value,
           rulesChannelId: rulesChannelId.value,
         ),
       );
@@ -176,16 +182,17 @@ class AntiSpam extends BotPlugin {
       await (channel as TextChannel).sendMessage(MessageBuilder(
         replyId: event.message.id,
         content:
-            'Set warning channel to <#$warnChannelId> and rule channel to <#$rulesChannelId>',
+            'Set warning channel to <#$warningChannelId> and rule channel to <#$rulesChannelId>',
       ));
 
       logger.info(
-          'Updated config for ${guild.id}: warn in $warnChannelId, rules channel $rulesChannelId');
-    } on FormatException {
+          'Updated config for ${guild.id}: warn in $warningChannelId, rules channel $rulesChannelId');
+    } on FormatException catch (e) {
       await (channel as TextChannel).sendMessage(MessageBuilder(
         replyId: event.message.id,
         content: "Couldn't parse channel IDs.",
       ));
+      logger.warning('Failed to parse config update from ${event.link} ($e)');
     }
   }
 }
