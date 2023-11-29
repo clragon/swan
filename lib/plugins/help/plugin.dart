@@ -9,9 +9,6 @@ class HelpPlugin extends BotPlugin {
   String get name => 'Help';
 
   @override
-  String get helpText => 'Displays this message.';
-
-  @override
   Future<void> afterConnect(NyxxGateway client) async {
     String prefix = client.env.commandPrefix;
     client.updatePresence(
