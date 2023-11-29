@@ -84,14 +84,13 @@ class AntiSpam extends BotPlugin {
 
       final guildChannels = _messages[event.guild!.id] ??= {};
       int count = 0;
-      for (final messages in guildChannels.entries
-          .where((element) => element.key != event.message.channel.id)
-          .map((e) => e.value)) {
-        if (messages.contains(
-          (event.message.author.id, event.message.content),
-        )) {
-          count++;
-        }
+      for (final messages in guildChannels.values) {
+        count += messages
+            .where(
+              (element) =>
+                  element == (event.message.author.id, event.message.content),
+            )
+            .length;
       }
 
       if (count != 0) {
