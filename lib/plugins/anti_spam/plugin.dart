@@ -104,20 +104,20 @@ class AntiSpam extends BotPlugin {
             (client.channels[Snowflake(config.warningChannelId)]
                 as PartialTextChannel);
 
-        if (count < 6) {
-          await warningChannel.sendMessage(
-            MessageBuilder(
-              content:
-                  'Hey, <@${event.message.author.id}>, please take a second to '
-                  'read the <#${config.rulesChannelId}>,\nspecifically, the '
-                  'section about not duplicating your messages across channels.'
-                  '\nIf you want to move a message, copy it, delete it, **then** '
-                  'paste it in another channel.\n\nThanks!',
-            ),
-          );
+        await warningChannel.sendMessage(
+          MessageBuilder(
+            content:
+                'Hey, <@${event.message.author.id}>, please take a second to '
+                'read the <#${config.rulesChannelId}>,\nspecifically, the '
+                'section about not duplicating your messages across channels.'
+                '\nIf you want to move a message, copy it, delete it, **then** '
+                'paste it in another channel.\n\nThanks!',
+          ),
+        );
 
-          logger.info('Warned ${event.message.author.id} ($count reposts)');
-        } else {
+        logger.info('Warned ${event.message.author.id} ($count reposts)');
+
+        if (count > 4) {
           try {
             await event.guild!.createBan(
               event.message.author.id,
