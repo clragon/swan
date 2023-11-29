@@ -22,8 +22,7 @@ class AntiSpam extends BotPlugin {
       'To enable this plugin, set the appropriate channels: '
       '`${client.env.commandPrefix}warn-in #warnings #rules`';
 
-  final Map<Snowflake, Map<Snowflake, Queue<(Snowflake, String)>>> _messages =
-      {};
+  final Map<Snowflake, Map<Snowflake, Queue<Message>>> _messages = {};
 
   @override
   void afterConnect(NyxxGateway client) {
@@ -34,14 +33,12 @@ class AntiSpam extends BotPlugin {
     client.onGuildCreate.listen((event) async {
       if (event is! GuildCreateEvent) return;
 
-      Future<Queue<(Snowflake, String)>> fetchInitialCache(
+      Future<Queue<Message>> fetchInitialCache(
         TextChannel channel,
       ) async {
         try {
           return Queue.of(
-            (await channel.messages.fetchMany(limit: cacheSize)).map(
-              (e) => (e.author.id, e.content),
-            ),
+            (await channel.messages.fetchMany(limit: cacheSize)),
           );
         } on HttpResponseError {
           // Couldn't read messages, bot cannot see channel
@@ -86,10 +83,9 @@ class AntiSpam extends BotPlugin {
       int count = 0;
       for (final messages in guildChannels.values) {
         count += messages
-            .where(
-              (element) =>
-                  element == (event.message.author.id, event.message.content),
-            )
+            .where((element) =>
+                element.author.id == event.message.author.id &&
+                element.content == event.message.content)
             .length;
       }
 
@@ -134,8 +130,14 @@ class AntiSpam extends BotPlugin {
 
       final messageQueue = guildChannels[event.message.channel.id] ??= Queue();
 
-      messageQueue.addFirst((event.message.author.id, event.message.content));
+      messageQueue.addFirst(event.message);
       if (messageQueue.length > cacheSize) messageQueue.removeLast();
+    });
+
+    client.onMessageDelete.listen((event) async {
+      _messages[event.guildId]?[event.channelId]?.removeWhere(
+        (element) => element.id == event.id,
+      );
     });
   }
 
