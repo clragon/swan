@@ -17,9 +17,9 @@ class AntiSpam extends BotPlugin {
 
   @override
   String buildHelpText(NyxxGateway client) =>
-      'Moderates spam by warning users if they repeat messages in multiple'
-      ' channels, and bans users if they repeat messages too many times.\n\n'
-      'Admins can configure the rules and warning channel using '
+      'Moderates spam by warning users for repeated messages.\n'
+      'Repeating the same message 5 times additionally leads to a ban.\n\n'
+      'To enable this plugin, set the appropriate channels: '
       '`${client.env.commandPrefix}warn-in #warnings #rules`';
 
   final Map<Snowflake, Map<Snowflake, Queue<(Snowflake, String)>>> _messages =
