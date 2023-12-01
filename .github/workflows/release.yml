@@ -60,6 +60,26 @@ jobs:
           name: app_${{ env.file_arch }}
           path: build/app_${{ env.file_arch }}
 
+      - name: build docker image
+        run: |
+          docker buildx create --name builder --use
+          docker buildx build \
+            --platform ${{ matrix.arch }} \
+            -t myapp:${{ github.run_id }}-${{ matrix.arch }} \
+            --build-arg ARCH=${{ matrix.arch }} \
+            --build-arg BINARY=build/app_${{ env.file_arch }} \
+            -f Dockerfile . \
+            --output type=docker,dest=app_image_${{ env.file_arch }}.tar
+        env:
+          DOCKER_BUILDKIT: 1
+        working-directory: ./Dockerfile
+
+      - name: upload docker image as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-image-${{ env.file_arch }}
+          path: app_image_${{ env.file_arch }}.tar
+
   create-release:
     needs: build
     runs-on: ubuntu-latest
