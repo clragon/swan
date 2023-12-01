@@ -60,6 +60,26 @@ jobs:
           name: app_${{ env.file_arch }}
           path: build/app_${{ env.file_arch }}
 
+      - name: build docker image
+        run: |
+          docker buildx create --name builder --use
+          docker buildx build \
+            --platform ${{ matrix.arch }} \
+            -t swan:${{ github.run_id }}-${{ env.file_arch }} \
+            -t swan:latest \
+            --build-arg ARCH=${{ matrix.arch }} \
+            --build-arg BINARY=build/app_${{ env.file_arch }} \
+            -f Dockerfile . \
+            --output type=docker,dest=app_image_${{ env.file_arch }}.tar
+        env:
+          DOCKER_BUILDKIT: 1
+
+      - name: upload docker image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app_image_${{ env.file_arch }}
+          path: app_image_${{ env.file_arch }}.tar
+
   create-release:
     needs: build
     runs-on: ubuntu-latest
@@ -76,6 +96,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: release-${{ github.run_id }}
-          files: ./app_*/app_*
+          files: |
+            ./app_*/app_*
+            ./app_image_*/app_image_*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -5,4 +5,6 @@
 .vscode
 logs
 build
-database.sqlite3
+
+# app data
+config/

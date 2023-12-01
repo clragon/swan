@@ -116,3 +116,35 @@ You can also specify a custom prefix for the bot:
 ```yml
 BOT_PREFIX=your_prefix_here # default: .
 ```
+
+## Docker
+
+You can run the bot in a Docker container.
+A pre-built image is available in the releases section.
+
+To run your image, load the image:
+
+```sh
+docker load -i app_image_*.tar
+```
+
+then create a docker compose file with the following content:
+
+```yml
+version: "3.8"
+services:
+  swan:
+    image: swan:latest
+    volumes:
+      - ./.env:/.env
+      - config:/config
+
+volumes:
+  config:
+```
+
+Then, run:
+
+```sh
+docker compose up -d
+```
