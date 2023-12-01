@@ -72,7 +72,6 @@ jobs:
             --output type=docker,dest=app_image_${{ env.file_arch }}.tar
         env:
           DOCKER_BUILDKIT: 1
-        working-directory: ./Dockerfile
 
       - name: upload docker image as artifact
         uses: actions/upload-artifact@v3
