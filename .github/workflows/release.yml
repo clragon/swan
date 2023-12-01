@@ -73,7 +73,7 @@ jobs:
         env:
           DOCKER_BUILDKIT: 1
 
-      - name: upload docker image as artifact
+      - name: upload docker image artifact
         uses: actions/upload-artifact@v3
         with:
           name: docker-image-${{ env.file_arch }}
