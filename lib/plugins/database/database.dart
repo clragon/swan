@@ -9,7 +9,7 @@ part 'database.g.dart';
 class SwanDatabase extends _$SwanDatabase {
   SwanDatabase()
       : super(
-          NativeDatabase.createInBackground(File('database.sqlite3')),
+          NativeDatabase.createInBackground(File('config/database.sqlite3')),
         );
 
   @override
