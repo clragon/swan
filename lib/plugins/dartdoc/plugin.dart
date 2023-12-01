@@ -10,7 +10,6 @@ import 'package:swan/plugins/base/messages.dart';
 import 'package:swan/plugins/base/plugin.dart';
 import 'package:swan/plugins/dartdoc/dartdoc_entry.dart';
 import 'package:swan/plugins/dartdoc/search_grammar.dart';
-import 'package:swan/plugins/env/plugin.dart';
 
 /// Very optimised, black magic.
 /// Adapted from https://en.wikipedia.org/wiki/Levenshtein_distance#Iterative_with_two_matrix_rows
@@ -82,9 +81,6 @@ class DartdocSearch extends BotPlugin {
   final documentationCache = <String, (DateTime, List<DartdocEntry>)>{};
 
   late final Timer flutterCacheTimer;
-
-  @override
-  bool isEnabled(NyxxGateway client) => !(client.env.disableDartdocs ?? false);
 
   @override
   String buildHelpText(NyxxGateway client) =>

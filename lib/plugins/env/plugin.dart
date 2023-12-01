@@ -9,7 +9,6 @@ class Environment {
     required this.discordToken,
     this.stackExchangeApiKey,
     this.pastebinApiKey,
-    this.disableDartdocs,
   });
 
   factory Environment.load() {
@@ -25,13 +24,12 @@ class Environment {
     if (prefix == null || prefix.isEmpty) {
       prefix = '.';
     }
-    String disableDartdocs = env[params[4]] ?? 'false';
+
     return Environment(
       commandPrefix: prefix,
       discordToken: env[params[1]]!,
       stackExchangeApiKey: env[params[2]],
       pastebinApiKey: env[params[3]],
-      disableDartdocs: bool.parse(disableDartdocs),
     );
   }
 
@@ -41,14 +39,12 @@ class Environment {
     'DISCORD_BOT_TOKEN': true,
     'STACKEXCHANGE_API_KEY': false,
     'PASTEBIN_API_KEY': false,
-    'DISABLE_DARTDOCS': false,
   };
 
   final String commandPrefix;
   final String discordToken;
   final String? stackExchangeApiKey;
   final String? pastebinApiKey;
-  final bool? disableDartdocs;
 }
 
 class EnvironmentException implements Exception {
@@ -70,8 +66,7 @@ class EnvironmentPlugin extends BotPlugin {
   String? buildHelpText(NyxxGateway client) =>
       '\n- Command prefix: `${client.env.commandPrefix}`'
       '\n- Stack Exchange Api: `${client.env.stackExchangeApiKey != null ? 'available' : 'limited'}`'
-      '\n- Pastebin Api: `${client.env.pastebinApiKey != null ? 'available' : 'unavailable'}`'
-      '\n- Dartdoc search: `${(client.env.disableDartdocs ?? false) ? 'disabled' : 'enabled'}`';
+      '\n- Pastebin Api: `${client.env.pastebinApiKey != null ? 'available' : 'unavailable'}`';
 
   final Environment env;
 }
