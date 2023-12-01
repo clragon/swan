@@ -65,7 +65,7 @@ jobs:
           docker buildx create --name builder --use
           docker buildx build \
             --platform ${{ matrix.arch }} \
-            -t myapp:${{ github.run_id }}-${{ matrix.arch }} \
+            -t swan:${{ github.run_id }}-${{ env.file_arch }} \
             --build-arg ARCH=${{ matrix.arch }} \
             --build-arg BINARY=build/app_${{ env.file_arch }} \
             -f Dockerfile . \
