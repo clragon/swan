@@ -263,7 +263,7 @@ class DartdocSearch extends BotPlugin {
                 EmbedBuilder(
                   title: 'Pub Search Results - ${search.name}',
                   fields: [
-                    for (final result in results)
+                    for (final result in results.take(10))
                       EmbedFieldBuilder(
                         name:
                             '${result.type} ${result.name} - ${result.enclosedBy?.type ?? package}',
