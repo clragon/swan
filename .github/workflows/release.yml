@@ -25,9 +25,6 @@ jobs:
       - name: get dependencies
         run: dart pub get
 
-      - name: set timestamp
-        run: echo "TIMESTAMP=$(date +'%Y%m%d.%H%M%S.%3N')" >> $GITHUB_ENV
-
       - name: set arch name for artifact
         run: echo "file_arch=$(echo ${{ matrix.arch }} | sed 's/\//_/g')" >> $GITHUB_ENV
 
@@ -68,7 +65,7 @@ jobs:
           docker buildx create --name builder --use
           docker buildx build \
             --platform ${{ matrix.arch }} \
-            -t swan:${{ env.TIMESTAMP }}-${{ env.file_arch }} \
+            -t swan:${{ github.run_id }}-${{ env.file_arch }} \
             -t swan:latest \
             --build-arg ARCH=${{ matrix.arch }} \
             --build-arg BINARY=build/app_${{ env.file_arch }} \
@@ -80,7 +77,7 @@ jobs:
       - name: upload docker image artifact
         uses: actions/upload-artifact@v3
         with:
-          name: docker-image-${{ env.file_arch }}
+          name: app_image_${{ env.file_arch }}
           path: app_image_${{ env.file_arch }}.tar
 
   create-release:
@@ -101,6 +98,6 @@ jobs:
           tag_name: release-${{ github.run_id }}
           files: |
             ./app_*/app_*
-            ./app_image_*/app_image_*.tar
+            ./app_image_*/app_image_*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
