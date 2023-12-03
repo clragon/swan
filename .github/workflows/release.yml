@@ -74,9 +74,9 @@ jobs:
             -t ${{ env.app_name }}:${{ github.run_id }}-${{ matrix.platform }} \
             -t ${{ env.app_name }}:latest \
             --build-arg ARCH=${{ matrix.image_arch }} \
-            --build-arg BINARY=build$/${{ env.app_name }}_${{ matrix.platform }} \
+            --build-arg BINARY=build/${{ env.app_name }}_${{ matrix.platform }} \
             -f Dockerfile . \
-            --output type=docker,dest$=${{ env.app_name }}_image_${{ matrix.platform }}.tar
+            --output type=docker,dest=${{ env.app_name }}_image_${{ matrix.platform }}.tar
         env:
           DOCKER_BUILDKIT: 1
 
