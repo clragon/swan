@@ -67,6 +67,7 @@ jobs:
           path: ${{ env.app_name }}_${{ matrix.platform }}
 
       - name: build docker image
+        if: matrix.image_arch != ''
         run: |
           docker buildx create --name builder --use
           docker buildx build \
@@ -81,6 +82,7 @@ jobs:
           DOCKER_BUILDKIT: 1
 
       - name: upload docker image artifact
+        if: matrix.image_arch != ''
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.app_name }}_image_${{ matrix.platform }}
