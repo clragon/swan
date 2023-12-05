@@ -66,11 +66,11 @@ class DartdocSearch extends BotPlugin {
     // Other packages are fetched and updated as needed.
     flutterCacheTimer = Timer.periodic(
       expireDuration * 0.9,
-      (_) => getEntries('flutter'),
+      (_) => getEntries('flutter', bypassCache: true),
     );
 
     // Kick off an initial load immediately
-    getEntries('flutter');
+    getEntries('flutter', bypassCache: true);
   }
 
   static const expireDuration = Duration(hours: 1);
@@ -90,7 +90,10 @@ class DartdocSearch extends BotPlugin {
       '- `\$[name]`: Return the pub.dev page for the package `name`\n'
       '- `&[name]`: Search pub.dev for `name`\n';
 
-  Future<(String, List<DartdocEntry>)> getEntries(String package) async {
+  Future<(String, List<DartdocEntry>)> getEntries(
+    String package, {
+    bool bypassCache = false,
+  }) async {
     final cached = documentationCache[package];
     final now = DateTime.timestamp();
     final cacheExpiry = now.add(-expireDuration);
@@ -101,7 +104,7 @@ class DartdocSearch extends BotPlugin {
 
     final url = '${urlBase}index.json';
 
-    if (cached != null && cached.$1.isAfter(cacheExpiry)) {
+    if (!bypassCache && cached != null && cached.$1.isAfter(cacheExpiry)) {
       return (urlBase, cached.$2);
     }
 
