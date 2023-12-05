@@ -73,7 +73,7 @@ class DartdocSearch extends BotPlugin {
     getEntries('flutter', bypassCache: true);
   }
 
-  static const expireDuration = Duration(minutes: 1);
+  static const expireDuration = Duration(hours: 1);
 
   @override
   String get name => 'DartdocSearch';
