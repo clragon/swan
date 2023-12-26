@@ -54,7 +54,7 @@ class CompileSwa extends BotPlugin {
       if (event.message.author case User(isBot: true)) return;
       List<String> sources = [];
 
-      RegExp command = RegExp(r'^' + prefix + r'swa\s*(>?\s*(?<content>.+))?$');
+      RegExp command = RegExp(r'^' + prefix + r'swa\s+(>?\s*(?<content>.+))?$');
       RegExpMatch? commandMatch = command.firstMatch(event.message.content);
 
       if (commandMatch != null) {
@@ -62,7 +62,7 @@ class CompileSwa extends BotPlugin {
       }
 
       RegExp codeblock =
-          RegExp(r'(?<!\\)```swa\s*?(?<content>[\s\S]+?)(?<!\\)```');
+          RegExp(r'(?<!\\)```swa\s+?(?<content>[\s\S]+?)(?<!\\)```');
 
       List<RegExpMatch> codeblockMatches =
           codeblock.allMatches(event.message.content).toList();
