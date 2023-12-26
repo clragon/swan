@@ -17,11 +17,6 @@ jobs:
           - os: ubuntu-latest
             platform: linux-amd64
             image_arch: amd64
-            qemu_arch: ""
-          - os: ubuntu-latest
-            platform: linux-arm64
-            image_arch: arm64
-            qemu_arch: aarch64
 
     runs-on: ${{ matrix.os }}
 
@@ -30,35 +25,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: set up dart SDK
-        if: matrix.qemu_arch == ''
         uses: dart-lang/setup-dart@v1
 
       - name: get dependencies
-        if: matrix.qemu_arch == ''
         run: dart pub get
 
       - name: build application
-        if: matrix.qemu_arch == ''
         run: dart compile exe lib/main.dart -o ${{ env.app_name }}_${{ matrix.platform }}
-
-      - name: set up QEMU
-        if: matrix.qemu_arch != ''
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: ${{ matrix.qemu_arch }}
-
-      - name: build application in docker
-        if: matrix.qemu_arch != ''
-        run: |
-          docker run \
-            --rm \
-            --platform linux/${{ matrix.qemu_arch }} \
-            -v "$(pwd)":/app \
-            -w /app \
-            dart:stable \
-            /bin/bash -c "\
-              dart pub get && \
-              dart compile exe lib/main.dart -o ${{ env.app_name }}_${{ matrix.platform }}"
 
       - name: upload artifact
         uses: actions/upload-artifact@v3
