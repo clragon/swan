@@ -14,6 +14,7 @@ class PastebinClient {
       'api_option': 'paste',
       'api_paste_code': content,
       'api_paste_expire_date': '1W',
+      'api_paste_private': '1',
       'api_paste_name': name ?? 'Untitled',
     };
 
