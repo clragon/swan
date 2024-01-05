@@ -90,6 +90,32 @@ class DartdocSearch extends BotPlugin {
       '- `\$[name]`: Return the pub.dev page for the package `name`\n'
       '- `&[name]`: Search pub.dev for `name`\n';
 
+  String removeCodeBlocks(String text) {
+    const notEscaped = r'(?<!\\)';
+    return text.replaceAll(
+      RegExp(
+        r'('
+        '$notEscaped'
+        r'```'
+        r'[\s\S]+?'
+        '$notEscaped'
+        '```'
+        r')' // removes not escaped triple backtick code blocks
+        r'|'
+        r'('
+        '$notEscaped'
+        r'(?<!`)'
+        r'`'
+        r'[^`]+'
+        '$notEscaped'
+        r'`'
+        '(?!`)'
+        r')', // removes not escaped single backtick code blocks
+      ),
+      '',
+    );
+  }
+
   Future<(String, List<DartdocEntry>)> getEntries(
     String package, {
     bool bypassCache = false,
@@ -324,7 +350,9 @@ class DartdocSearch extends BotPlugin {
     }
 
     client.onMessageCreate.listen((event) async {
-      if (parser.parse(event.message.content) case Success(:final value)) {
+      String content = event.message.content;
+      content = removeCodeBlocks(content);
+      if (parser.parse(content) case Success(:final value)) {
         for (final search in value) {
           if (event.message.author case User(isBot: false)) {
             await handle(search, event);
