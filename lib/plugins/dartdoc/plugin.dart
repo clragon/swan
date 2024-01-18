@@ -211,29 +211,58 @@ class DartdocSearch extends BotPlugin {
 
           final (urlBase, entries) = await getEntries(package);
 
-          final useNamePattern = RegExp(r'^([A-Za-z$_A-Za-z0-9$_]*?)$');
           final query = search.name;
-          final byName = useNamePattern.hasMatch(search.name);
+          final periodCount = '.'.allMatches(query).length;
 
           // lehvenstein can block, especially if we are searching the Flutter
           // docs (80k+ calls). We need to move the isolate creation to a
           // different function to avoid capturing `this` in the closure
           // context.
-          Future<List<DartdocEntry>> process(
+          Future<List<(int, DartdocEntry)>> process(
             String query,
             List<DartdocEntry> entries, {
-            required bool byName,
+            required int periodCount,
           }) {
             return Isolate.run(() {
-              final results = List.of(entries.map(
-                (e) => (
-                  lehvenstein(
-                    query,
-                    (byName ? e.name : e.qualifiedName).toLowerCase(),
-                  ),
-                  e,
-                ),
-              ));
+              final results = entries
+                  // Filter elements we search for based on what the query looks
+                  // like:
+                  // - `element` => include libraries and top level elements
+                  // - `container.element` => include top level elements and
+                  //                          class members
+                  // - `full.qualified.name` => include everything
+                  .where(
+                    (e) => switch (periodCount) {
+                      0 =>
+                        e.enclosedBy == null || e.enclosedBy?.type == 'library',
+                      1 => e.enclosedBy != null,
+                      _ => true,
+                    },
+                  )
+                  .map(
+                    (e) => (
+                      lehvenstein(
+                        query,
+                        // Decide what to match on based on what the query looks
+                        // like:
+                        // `element` => simple name
+                        // `container.element` => last two parts of the
+                        //                        qualified name
+                        // `full.qualified.name` => complete qualified name
+                        switch (periodCount) {
+                          0 => e.name,
+                          1 => e.qualifiedName
+                              .split('.')
+                              .skip('.'.allMatches(e.qualifiedName).length - 1)
+                              .join('.'),
+                          _ => e.qualifiedName,
+                        }
+                            .toLowerCase(),
+                      ),
+                      e,
+                    ),
+                  )
+                  .toList();
 
               double getWeight(String type) => switch (type) {
                     // Make classes more likely to appear than constructors or
@@ -247,14 +276,14 @@ class DartdocSearch extends BotPlugin {
                 (a, b) => ((a.$1 + 1) / getWeight(a.$2.type))
                     .compareTo((b.$1 + 1) / getWeight(b.$2.type)),
               );
-              return List.of(results.map((e) => e.$2));
+              return results;
             });
           }
 
           final results = await process(
             query.toLowerCase(),
             entries,
-            byName: byName,
+            periodCount: periodCount,
           );
 
           if (results.isEmpty) {
@@ -273,12 +302,13 @@ class DartdocSearch extends BotPlugin {
           }
 
           if (search.kind == SearchKind.elementLookup) {
-            final topEntry = results.first;
+            final topResults =
+                results.takeWhile((value) => value.$1 == results.first.$1);
 
             await event.message.channel.sendMessage(MessageBuilder(
               replyId: event.message.id,
               allowedMentions: AllowedMentions(repliedUser: false),
-              content: '$urlBase${topEntry.href}',
+              content: topResults.map((e) => '$urlBase${e.$2.href}').join('\n'),
             ));
           } else {
             await event.message.channel.sendMessage(MessageBuilder(
@@ -288,7 +318,7 @@ class DartdocSearch extends BotPlugin {
                 EmbedBuilder(
                   title: 'Pub Search Results - ${search.name}',
                   fields: [
-                    for (final result in results.take(10))
+                    for (final result in results.take(10).map((e) => e.$2))
                       EmbedFieldBuilder(
                         name:
                             '${result.type} ${result.name} - ${result.enclosedBy?.type ?? package}',
