@@ -22,9 +22,10 @@ class StackOverflowMirror extends BotPlugin {
   FutureOr<void> afterConnect(NyxxGateway client) {
     client.onMessageCreate.listen((event) async {
       String prefix = client.env.commandPrefix;
-      RegExp links = RegExp(
-        r'https:\/\/stackoverflow\.com\/questions\/\d+\/\S+',
-      );
+      RegExp links = RegExp(r'https:\/\/stackoverflow\.com\/'
+          r'(questions\/\d+\/\S+'
+          r'|'
+          r'q\/\d+\/\S+)');
       RegExp command = RegExp(
         r'^' +
             RegExp.escape(prefix) +
