@@ -39,7 +39,7 @@ String _typeFromJson(int kind) => [
       'dynamic',
       'enum_',
       'extension',
-      // 'extensionType',
+      'extensionType',
       'function',
       'library',
       'method',
