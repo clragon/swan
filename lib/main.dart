@@ -1,4 +1,5 @@
 import 'package:nyxx/nyxx.dart';
+import 'package:swan/plugins/anti_siege/plugin.dart';
 import 'package:swan/plugins/anti_spam/plugin.dart';
 import 'package:swan/plugins/dartdoc/plugin.dart';
 import 'package:swan/plugins/database/database.dart';
@@ -16,7 +17,9 @@ Future<void> main() async {
   await Nyxx.connectGatewayWithOptions(
     GatewayApiOptions(
       token: env.discordToken,
-      intents: GatewayIntents.allUnprivileged | GatewayIntents.messageContent,
+      intents: GatewayIntents.allUnprivileged |
+          GatewayIntents.messageContent |
+          GatewayIntents.guildMembers,
     ),
     GatewayClientOptions(
       plugins: [
@@ -32,6 +35,7 @@ Future<void> main() async {
         PasteFiles(),
         DartdocSearch(),
         AntiSpam(),
+        AntiSiege(),
       ],
     ),
   );
