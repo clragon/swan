@@ -1,5 +1,4 @@
 import 'package:nyxx/nyxx.dart';
-import 'package:swan/plugins/anti_siege/plugin.dart';
 import 'package:swan/plugins/anti_spam/plugin.dart';
 import 'package:swan/plugins/dartdoc/plugin.dart';
 import 'package:swan/plugins/database/database.dart';
@@ -35,7 +34,6 @@ Future<void> main() async {
         PasteFiles(),
         DartdocSearch(),
         AntiSpam(),
-        AntiSiege(),
       ],
     ),
   );
