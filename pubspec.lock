@@ -242,10 +242,10 @@ packages:
     dependency: transitive
     description:
       name: file
-      sha256: "5fc22d7c25582e38ad9a8515372cd9a93834027aacf1801cf01164dac0ffa08c"
+      sha256: a3b4f84adafef897088c160faf7dfffb7696046cb13ae90b508c2cbc95d3b8d4
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.0"
+    version: "7.0.1"
   fixnum:
     dependency: transitive
     description:
@@ -418,10 +418,10 @@ packages:
     dependency: "direct main"
     description:
       name: nyxx
-      sha256: cc027c9097684d0fefb8bd65c1d3e4c0fbd27e98aa7a91aecb7b4cd1d3d9f991
+      sha256: "0d754f464794741e8c50df22e53e52a73c5a2bae51227f5583231cde3ea7c0c2"
       url: "https://pub.dev"
     source: hosted
-    version: "6.4.2"
+    version: "6.4.3"
   nyxx_extensions:
     dependency: "direct main"
     description:

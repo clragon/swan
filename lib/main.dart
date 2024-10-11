@@ -22,7 +22,9 @@ Future<void> main() async {
     ),
     GatewayClientOptions(
       plugins: [
-        Logging(),
+        Logging(
+          logLevel: Level.ALL,
+        ),
         CliIntegration(),
         IgnoreExceptions(),
         EnvironmentPlugin(env),
