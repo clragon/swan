@@ -5,7 +5,7 @@ import 'package:drift/native.dart';
 
 part 'database.g.dart';
 
-@DriftDatabase(tables: [AntiSpamConfigs])
+@DriftDatabase(tables: [AntiSpamConfigs, BotsRoleConfigs])
 class SwanDatabase extends _$SwanDatabase {
   SwanDatabase()
       : super(
@@ -13,7 +13,7 @@ class SwanDatabase extends _$SwanDatabase {
         );
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   Stream<AntiSpamConfig?> antiSpamConfig(int id) =>
       (select(antiSpamConfigs)..where((tbl) => tbl.guildId.equals(id)))
@@ -24,6 +24,13 @@ class SwanDatabase extends _$SwanDatabase {
 
   Future<void> deleteAntiSpamConfig(int id) =>
       (delete(antiSpamConfigs)..where((tbl) => tbl.guildId.equals(id))).go();
+
+  Stream<BotsRoleConfig?> botsRoleConfig(int id) =>
+      (select(botsRoleConfigs)..where((tbl) => tbl.guildId.equals(id)))
+          .watchSingleOrNull();
+
+  Future<void> setBotsRoleConfig(BotsRoleConfigsCompanion config) =>
+      into(botsRoleConfigs).insertOnConflictUpdate(config);
 }
 
 class AntiSpamConfigs extends Table {
@@ -33,4 +40,12 @@ class AntiSpamConfigs extends Table {
   IntColumn get guildId => integer()();
   IntColumn get warningChannelId => integer()();
   IntColumn get rulesChannelId => integer()();
+}
+
+class BotsRoleConfigs extends Table {
+  @override
+  Set<Column> get primaryKey => {guildId};
+
+  IntColumn get guildId => integer()();
+  IntColumn get botsRoleId => integer()();
 }

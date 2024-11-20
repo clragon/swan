@@ -11,7 +11,7 @@ _$DartdocEntryImpl _$$DartdocEntryImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       qualifiedName: json['qualifiedName'] as String,
       href: json['href'] as String,
-      type: _typeFromJson(json['kind'] as int),
+      type: _typeFromJson((json['kind'] as num).toInt()),
       description: json['desc'] as String,
       enclosedBy: json['enclosedBy'] == null
           ? null
@@ -33,7 +33,7 @@ _$DartdocEnclosedByImpl _$$DartdocEnclosedByImplFromJson(
         Map<String, dynamic> json) =>
     _$DartdocEnclosedByImpl(
       name: json['name'] as String,
-      type: _typeFromJson(json['kind'] as int),
+      type: _typeFromJson((json['kind'] as num).toInt()),
     );
 
 Map<String, dynamic> _$$DartdocEnclosedByImplToJson(

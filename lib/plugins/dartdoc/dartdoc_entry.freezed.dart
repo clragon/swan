@@ -31,8 +31,12 @@ mixin _$DartdocEntry {
   @JsonKey(required: false, name: 'enclosedBy')
   DartdocEnclosedBy? get enclosedBy => throw _privateConstructorUsedError;
 
+  /// Serializes this DartdocEntry to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DartdocEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DartdocEntryCopyWith<DartdocEntry> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -65,6 +69,8 @@ class _$DartdocEntryCopyWithImpl<$Res, $Val extends DartdocEntry>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DartdocEntry
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -103,6 +109,8 @@ class _$DartdocEntryCopyWithImpl<$Res, $Val extends DartdocEntry>
     ) as $Val);
   }
 
+  /// Create a copy of DartdocEntry
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $DartdocEnclosedByCopyWith<$Res>? get enclosedBy {
@@ -145,6 +153,8 @@ class __$$DartdocEntryImplCopyWithImpl<$Res>
       _$DartdocEntryImpl _value, $Res Function(_$DartdocEntryImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DartdocEntry
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -236,12 +246,14 @@ class _$DartdocEntryImpl implements _DartdocEntry {
                 other.enclosedBy == enclosedBy));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType, name, qualifiedName, href, type, description, enclosedBy);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DartdocEntry
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DartdocEntryImplCopyWith<_$DartdocEntryImpl> get copyWith =>
@@ -285,8 +297,11 @@ abstract class _DartdocEntry implements DartdocEntry {
   @override
   @JsonKey(required: false, name: 'enclosedBy')
   DartdocEnclosedBy? get enclosedBy;
+
+  /// Create a copy of DartdocEntry
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DartdocEntryImplCopyWith<_$DartdocEntryImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -301,8 +316,12 @@ mixin _$DartdocEnclosedBy {
   @JsonKey(fromJson: _typeFromJson, name: 'kind')
   String get type => throw _privateConstructorUsedError;
 
+  /// Serializes this DartdocEnclosedBy to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DartdocEnclosedBy
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $DartdocEnclosedByCopyWith<DartdocEnclosedBy> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -328,6 +347,8 @@ class _$DartdocEnclosedByCopyWithImpl<$Res, $Val extends DartdocEnclosedBy>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of DartdocEnclosedBy
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -368,6 +389,8 @@ class __$$DartdocEnclosedByImplCopyWithImpl<$Res>
       $Res Function(_$DartdocEnclosedByImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DartdocEnclosedBy
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -417,11 +440,13 @@ class _$DartdocEnclosedByImpl implements _DartdocEnclosedBy {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, name, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DartdocEnclosedBy
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DartdocEnclosedByImplCopyWith<_$DartdocEnclosedByImpl> get copyWith =>
@@ -450,8 +475,11 @@ abstract class _DartdocEnclosedBy implements DartdocEnclosedBy {
   @override
   @JsonKey(fromJson: _typeFromJson, name: 'kind')
   String get type;
+
+  /// Create a copy of DartdocEnclosedBy
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DartdocEnclosedByImplCopyWith<_$DartdocEnclosedByImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

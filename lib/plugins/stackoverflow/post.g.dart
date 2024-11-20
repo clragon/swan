@@ -11,10 +11,10 @@ _$StackOverflowPostImpl _$$StackOverflowPostImplFromJson(
     _$StackOverflowPostImpl(
       owner: StackOverflowPostOwner.fromJson(
           json['owner'] as Map<String, dynamic>),
-      score: json['score'] as int,
-      lastActivityDate: json['last_activity_date'] as int,
-      creationDate: json['creation_date'] as int,
-      questionId: json['question_id'] as int,
+      score: (json['score'] as num).toInt(),
+      lastActivityDate: (json['last_activity_date'] as num).toInt(),
+      creationDate: (json['creation_date'] as num).toInt(),
+      questionId: (json['question_id'] as num).toInt(),
       bodyMarkdown: json['body_markdown'] as String,
       link: json['link'] as String,
       title: json['title'] as String,
