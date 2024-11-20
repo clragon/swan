@@ -19,7 +19,7 @@ dependencies:
   logging: ^1.2.0
   meta: ^1.9.1
   nyxx: ^6.4.2
-  nyxx_extensions: ^4.2.0
+  nyxx_extensions: ^4.2.1
   petitparser: ^6.0.1
   recase: ^4.1.0
   timeago: ^3.5.0
