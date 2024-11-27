@@ -443,41 +443,64 @@ typedef $$AntiSpamConfigsTableUpdateCompanionBuilder = AntiSpamConfigsCompanion
 });
 
 class $$AntiSpamConfigsTableFilterComposer
-    extends FilterComposer<_$SwanDatabase, $AntiSpamConfigsTable> {
-  $$AntiSpamConfigsTableFilterComposer(super.$state);
-  ColumnFilters<int> get guildId => $state.composableBuilder(
-      column: $state.table.guildId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$SwanDatabase, $AntiSpamConfigsTable> {
+  $$AntiSpamConfigsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get guildId => $composableBuilder(
+      column: $table.guildId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get warningChannelId => $state.composableBuilder(
-      column: $state.table.warningChannelId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get warningChannelId => $composableBuilder(
+      column: $table.warningChannelId,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get rulesChannelId => $state.composableBuilder(
-      column: $state.table.rulesChannelId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get rulesChannelId => $composableBuilder(
+      column: $table.rulesChannelId,
+      builder: (column) => ColumnFilters(column));
 }
 
 class $$AntiSpamConfigsTableOrderingComposer
-    extends OrderingComposer<_$SwanDatabase, $AntiSpamConfigsTable> {
-  $$AntiSpamConfigsTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get guildId => $state.composableBuilder(
-      column: $state.table.guildId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$SwanDatabase, $AntiSpamConfigsTable> {
+  $$AntiSpamConfigsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get guildId => $composableBuilder(
+      column: $table.guildId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get warningChannelId => $state.composableBuilder(
-      column: $state.table.warningChannelId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get warningChannelId => $composableBuilder(
+      column: $table.warningChannelId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get rulesChannelId => $state.composableBuilder(
-      column: $state.table.rulesChannelId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get rulesChannelId => $composableBuilder(
+      column: $table.rulesChannelId,
+      builder: (column) => ColumnOrderings(column));
+}
+
+class $$AntiSpamConfigsTableAnnotationComposer
+    extends Composer<_$SwanDatabase, $AntiSpamConfigsTable> {
+  $$AntiSpamConfigsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get guildId =>
+      $composableBuilder(column: $table.guildId, builder: (column) => column);
+
+  GeneratedColumn<int> get warningChannelId => $composableBuilder(
+      column: $table.warningChannelId, builder: (column) => column);
+
+  GeneratedColumn<int> get rulesChannelId => $composableBuilder(
+      column: $table.rulesChannelId, builder: (column) => column);
 }
 
 class $$AntiSpamConfigsTableTableManager extends RootTableManager<
@@ -486,6 +509,7 @@ class $$AntiSpamConfigsTableTableManager extends RootTableManager<
     AntiSpamConfig,
     $$AntiSpamConfigsTableFilterComposer,
     $$AntiSpamConfigsTableOrderingComposer,
+    $$AntiSpamConfigsTableAnnotationComposer,
     $$AntiSpamConfigsTableCreateCompanionBuilder,
     $$AntiSpamConfigsTableUpdateCompanionBuilder,
     (
@@ -499,10 +523,12 @@ class $$AntiSpamConfigsTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$AntiSpamConfigsTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$AntiSpamConfigsTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$AntiSpamConfigsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AntiSpamConfigsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AntiSpamConfigsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> guildId = const Value.absent(),
             Value<int> warningChannelId = const Value.absent(),
@@ -536,6 +562,7 @@ typedef $$AntiSpamConfigsTableProcessedTableManager = ProcessedTableManager<
     AntiSpamConfig,
     $$AntiSpamConfigsTableFilterComposer,
     $$AntiSpamConfigsTableOrderingComposer,
+    $$AntiSpamConfigsTableAnnotationComposer,
     $$AntiSpamConfigsTableCreateCompanionBuilder,
     $$AntiSpamConfigsTableUpdateCompanionBuilder,
     (
@@ -556,31 +583,51 @@ typedef $$BotsRoleConfigsTableUpdateCompanionBuilder = BotsRoleConfigsCompanion
 });
 
 class $$BotsRoleConfigsTableFilterComposer
-    extends FilterComposer<_$SwanDatabase, $BotsRoleConfigsTable> {
-  $$BotsRoleConfigsTableFilterComposer(super.$state);
-  ColumnFilters<int> get guildId => $state.composableBuilder(
-      column: $state.table.guildId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$SwanDatabase, $BotsRoleConfigsTable> {
+  $$BotsRoleConfigsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get guildId => $composableBuilder(
+      column: $table.guildId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get botsRoleId => $state.composableBuilder(
-      column: $state.table.botsRoleId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get botsRoleId => $composableBuilder(
+      column: $table.botsRoleId, builder: (column) => ColumnFilters(column));
 }
 
 class $$BotsRoleConfigsTableOrderingComposer
-    extends OrderingComposer<_$SwanDatabase, $BotsRoleConfigsTable> {
-  $$BotsRoleConfigsTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get guildId => $state.composableBuilder(
-      column: $state.table.guildId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$SwanDatabase, $BotsRoleConfigsTable> {
+  $$BotsRoleConfigsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get guildId => $composableBuilder(
+      column: $table.guildId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get botsRoleId => $state.composableBuilder(
-      column: $state.table.botsRoleId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get botsRoleId => $composableBuilder(
+      column: $table.botsRoleId, builder: (column) => ColumnOrderings(column));
+}
+
+class $$BotsRoleConfigsTableAnnotationComposer
+    extends Composer<_$SwanDatabase, $BotsRoleConfigsTable> {
+  $$BotsRoleConfigsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get guildId =>
+      $composableBuilder(column: $table.guildId, builder: (column) => column);
+
+  GeneratedColumn<int> get botsRoleId => $composableBuilder(
+      column: $table.botsRoleId, builder: (column) => column);
 }
 
 class $$BotsRoleConfigsTableTableManager extends RootTableManager<
@@ -589,6 +636,7 @@ class $$BotsRoleConfigsTableTableManager extends RootTableManager<
     BotsRoleConfig,
     $$BotsRoleConfigsTableFilterComposer,
     $$BotsRoleConfigsTableOrderingComposer,
+    $$BotsRoleConfigsTableAnnotationComposer,
     $$BotsRoleConfigsTableCreateCompanionBuilder,
     $$BotsRoleConfigsTableUpdateCompanionBuilder,
     (
@@ -602,10 +650,12 @@ class $$BotsRoleConfigsTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$BotsRoleConfigsTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$BotsRoleConfigsTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$BotsRoleConfigsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BotsRoleConfigsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BotsRoleConfigsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> guildId = const Value.absent(),
             Value<int> botsRoleId = const Value.absent(),
@@ -635,6 +685,7 @@ typedef $$BotsRoleConfigsTableProcessedTableManager = ProcessedTableManager<
     BotsRoleConfig,
     $$BotsRoleConfigsTableFilterComposer,
     $$BotsRoleConfigsTableOrderingComposer,
+    $$BotsRoleConfigsTableAnnotationComposer,
     $$BotsRoleConfigsTableCreateCompanionBuilder,
     $$BotsRoleConfigsTableUpdateCompanionBuilder,
     (
