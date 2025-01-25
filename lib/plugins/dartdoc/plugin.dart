@@ -176,6 +176,12 @@ class DartdocSearch extends BotPlugin {
         .map((e) => e['package'] as String)
         .toList();
 
+    final distances = {
+      for (final result in results) result: lehvenstein(query, result),
+    };
+
+    results.sort((a, b) => distances[a]!.compareTo(distances[b]!));
+
     searchCache[query] = (now, results);
     return results;
   }
