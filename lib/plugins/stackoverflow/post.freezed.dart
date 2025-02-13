@@ -29,8 +29,12 @@ mixin _$StackOverflowPost {
   String get link => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
 
+  /// Serializes this StackOverflowPost to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of StackOverflowPost
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $StackOverflowPostCopyWith<StackOverflowPost> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -64,6 +68,8 @@ class _$StackOverflowPostCopyWithImpl<$Res, $Val extends StackOverflowPost>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of StackOverflowPost
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -112,6 +118,8 @@ class _$StackOverflowPostCopyWithImpl<$Res, $Val extends StackOverflowPost>
     ) as $Val);
   }
 
+  /// Create a copy of StackOverflowPost
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $StackOverflowPostOwnerCopyWith<$Res> get owner {
@@ -151,6 +159,8 @@ class __$$StackOverflowPostImplCopyWithImpl<$Res>
       $Res Function(_$StackOverflowPostImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of StackOverflowPost
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -257,12 +267,14 @@ class _$StackOverflowPostImpl implements _StackOverflowPost {
             (identical(other.title, title) || other.title == title));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, owner, score, lastActivityDate,
       creationDate, questionId, bodyMarkdown, link, title);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of StackOverflowPost
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$StackOverflowPostImplCopyWith<_$StackOverflowPostImpl> get copyWith =>
@@ -307,8 +319,11 @@ abstract class _StackOverflowPost implements StackOverflowPost {
   String get link;
   @override
   String get title;
+
+  /// Create a copy of StackOverflowPost
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$StackOverflowPostImplCopyWith<_$StackOverflowPostImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -323,8 +338,12 @@ mixin _$StackOverflowPostOwner {
   String get displayName => throw _privateConstructorUsedError;
   String get link => throw _privateConstructorUsedError;
 
+  /// Serializes this StackOverflowPostOwner to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of StackOverflowPostOwner
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $StackOverflowPostOwnerCopyWith<StackOverflowPostOwner> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -349,6 +368,8 @@ class _$StackOverflowPostOwnerCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of StackOverflowPostOwner
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -390,6 +411,8 @@ class __$$StackOverflowPostOwnerImplCopyWithImpl<$Res>
       $Res Function(_$StackOverflowPostOwnerImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of StackOverflowPostOwner
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -437,11 +460,13 @@ class _$StackOverflowPostOwnerImpl implements _StackOverflowPostOwner {
             (identical(other.link, link) || other.link == link));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, displayName, link);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of StackOverflowPostOwner
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$StackOverflowPostOwnerImplCopyWith<_$StackOverflowPostOwnerImpl>
@@ -468,8 +493,11 @@ abstract class _StackOverflowPostOwner implements StackOverflowPostOwner {
   String get displayName;
   @override
   String get link;
+
+  /// Create a copy of StackOverflowPostOwner
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$StackOverflowPostOwnerImplCopyWith<_$StackOverflowPostOwnerImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

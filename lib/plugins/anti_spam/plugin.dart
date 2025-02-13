@@ -63,10 +63,8 @@ class AntiSpam extends BotPlugin {
       final member = await event.member?.get();
       if (guild == null || member == null) return;
 
-      final permissions = await computePermissions(
-        guild,
+      final permissions = await member.computePermissionsIn(
         await event.message.channel.get() as GuildChannel,
-        member,
       );
 
       if (permissions.isAdministrator) return;
@@ -164,7 +162,7 @@ class AntiSpam extends BotPlugin {
     final guild = await event.guild?.get();
     if (guild == null) return;
 
-    final permissions = await computePermissions(guild, channel, member);
+    final permissions = await channel.computePermissionsFor(member);
     if (!permissions.canManageGuild) return;
 
     try {
@@ -196,78 +194,4 @@ class AntiSpam extends BotPlugin {
       logger.warning('Failed to parse anti spam config from:\n${event.link}');
     }
   }
-}
-
-Future<Permissions> computePermissions(
-  Guild guild,
-  GuildChannel channel,
-  Member member,
-) async {
-  Future<Permissions> computeBasePermissions() async {
-    if (guild.ownerId == member.id) {
-      return Permissions.allPermissions;
-    }
-
-    final everyoneRole = await guild.roles[guild.id].get();
-    Flags<Permissions> permissions = everyoneRole.permissions;
-
-    for (final role in member.roles) {
-      final rolePermissions = (await role.get()).permissions;
-
-      permissions |= rolePermissions;
-    }
-
-    permissions = Permissions(permissions.value);
-    permissions as Permissions;
-
-    if (permissions.isAdministrator) {
-      return Permissions.allPermissions;
-    }
-
-    return permissions;
-  }
-
-  Future<Permissions> computeOverwrites(Permissions basePermissions) async {
-    if (basePermissions.isAdministrator) {
-      return Permissions.allPermissions;
-    }
-
-    Flags<Permissions> permissions = basePermissions;
-
-    final everyoneOverwrite = channel.permissionOverwrites
-        .where((overwrite) => overwrite.id == guild.id)
-        .singleOrNull;
-    if (everyoneOverwrite != null) {
-      permissions &= ~everyoneOverwrite.deny;
-      permissions |= everyoneOverwrite.allow;
-    }
-
-    Flags<Permissions> allow = const Permissions(0);
-    Flags<Permissions> deny = const Permissions(0);
-
-    for (final roleId in member.roleIds) {
-      final roleOverwrite = channel.permissionOverwrites
-          .where((overwrite) => overwrite.id == roleId)
-          .singleOrNull;
-      if (roleOverwrite != null) {
-        allow |= roleOverwrite.allow;
-        deny |= roleOverwrite.deny;
-      }
-    }
-
-    permissions &= ~deny;
-    permissions |= allow;
-
-    final memberOverwrite = channel.permissionOverwrites
-        .where((overwrite) => overwrite.id == member.id)
-        .singleOrNull;
-    if (memberOverwrite != null) {
-      permissions &= ~memberOverwrite.deny;
-      permissions |= memberOverwrite.allow;
-    }
-
-    return Permissions(permissions.value);
-  }
-
-  return computeOverwrites(await computeBasePermissions());
 }
